@@ -10,7 +10,11 @@ regexes = {
 
 def getProductInfo(html, store):
     soup = BeautifulSoup(html)
+    # all props
     for h in soup.find_all(itemprop=True):
+        print h.text
+    # price
+    for h in soup.find_all("span", {'itemprop': 'price'}):
         print h.text
 
 
