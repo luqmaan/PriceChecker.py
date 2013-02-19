@@ -2,7 +2,8 @@ from BeautifulSoup import BeautifulSoup
 
 regexes = {
     "uo": {
-        "price": ""
+        "price": "",
+        "sku": ""
     }
 }
 
