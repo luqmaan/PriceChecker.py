@@ -1,4 +1,4 @@
-from BeautifulSoup import BeautifulSoup
+from bs4 import BeautifulSoup
 
 regexes = {
     "uo": {
@@ -10,7 +10,8 @@ regexes = {
 
 def getProductInfo(html, store):
     soup = BeautifulSoup(html)
-    return soup.h2
+    for h in soup.find_all(itemprop=True):
+        print h.text
 
 
 # http://www.urbanoutfitters.com/urban/catalog/productdetail.jsp?id=26872101&parentid=M_NEWARRIVALS
@@ -20,4 +21,4 @@ html = ""
 for line in f:
     html += str(line)
 
-print getProductInfo(html, "uo")
+getProductInfo(html, "uo")
