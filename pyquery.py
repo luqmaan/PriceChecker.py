@@ -1,15 +1,14 @@
 import sys
-# I needed this, sorry :(
 sys.path.insert(0, "/Library/Python/2.7/site-packages")
+sys.path.insert(1, "/usr/local/lib/python2.6/dist-packages") 
 
 from pyquery import PyQuery as pq
 from urlparse import urlparse
 
 # [site: url: { attribute keys: values (dom xpaths) }
 search_list = {"urbanoutfitters.com": {"/catalog/productdetail.jsp": {
-    "price": ["span[itemprop=price]", "span[itemprop=sale]"]
+    "price": ["span[itemprop=price]", "span[itemprop=sale]", "BODY > DIV#content > DIV#productDetail > DIV#prodOptions > H2.price > SPAN"]
 }}}
-
 
 def getProductInfo(html, url):
     d = pq(html)
