@@ -7,11 +7,7 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import relationship, backref
 
-
-
 engine = create_engine('sqlite:///:memory:', echo=True)
-
-
 
 engine.execute("select 1").scalar()
 
