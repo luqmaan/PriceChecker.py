@@ -1,0 +1,19 @@
+{
+  "name": "Get the XPath",
+  "description": "Logs an XPath to the console.",
+  "version": "0.1",
+  "background": {
+    "scripts": ["background.js"]
+  },
+  // "content_scripts": {
+  //   "js": ["jquery.min.js", "marklet.js"]
+  // },
+  "permissions": [
+    "tabs", "http://*/*", "https://*/*"
+  ],
+  "browser_action": {
+    "default_title": "Print this page",
+    "default_icon": "print_16x16.png"
+  },
+  "manifest_version": 2
+}
