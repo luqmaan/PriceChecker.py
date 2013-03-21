@@ -15,18 +15,6 @@ app.config.from_object(__name__)
 app.config.from_envvar('FLASKR_SETTINGS', silent=True)
 
 
-# Model
-db = SqliteDatabase(DATABASE)
-class BaseModel(Model):
-    class Meta:
-            database = db
-class Bookmark(BaseModel):
-    title = TextField(null=False)
-    url = TextField(unique=True, index=True)
-    desc = TextField()
-def create_tables():
-    Bookmark.create_table()
-
 # Routes
 @app.route('/', methods=['GET','POST'])
 def index():

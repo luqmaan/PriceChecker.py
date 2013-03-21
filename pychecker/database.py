@@ -8,7 +8,7 @@ from sqlalchemy.orm import sessionmaker, relationship, backref
 #some basic info on how it works at line ~80
 
 #set echo to False to get rid of detailed SQL info
-engine = create_engine('sqlite:///pricechecker.db', echo=True)
+engine = create_engine('sqlite:///pychecker.db', echo=True)
 
 #main base class from which all other classes inherit
 Base = declarative_base()
@@ -79,7 +79,7 @@ Base.metadata.create_all(engine)
 #binds Session to db
 Session = sessionmaker(bind = engine)
 #creates an "instance" of session to let you interact with db
-session = Session()
+db_session = Session()
 
 #to add things to db, first add to session, then commit
 
@@ -118,7 +118,7 @@ session = Session()
 
 #session.commit()
 
-for instance in session.query(User).order_by(User.id):
+for instance in db_session.query(User).order_by(User.id):
     print instance.username, instance.following
 
 #print test_user.following
