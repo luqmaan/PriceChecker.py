@@ -1,0 +1,6 @@
+{% extends "layout.html" %}
+{% block body %}
+	<h2>{{ entry.title }}</h2>
+	{{ entry.url|safe }}<br />
+	{{entry.desc}}
+{% endblock %}

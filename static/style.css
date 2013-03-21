@@ -1,0 +1,43 @@
+body
+{
+	font-family:sans-serif;
+	background:#eee;
+}
+
+h1,h2,h3,h4,h5 {
+	font-family: Georgia;
+	font-weight: normal;
+}
+
+.container {
+	margin-top: 50px;
+}
+
+.entries li {
+	background: #f8f8f8;
+	padding: 15px 20px;
+	border: 1px solid #fff;
+	border-bottom-color: #ddd;
+	word-wrap:break-word;
+}
+
+.flash
+{
+	background:#CEE5F5;
+	padding:.5em;
+	border:1px solid #AACBE2;
+	margin: 10px 0px;
+}
+
+.error
+{
+	background:#F0D6D6;
+	padding:.5em;
+}
+
+.search input[type="text"] {
+	float: left;
+	margin-top: 3px;
+	margin-right: 2px;
+	width: 100px;
+}

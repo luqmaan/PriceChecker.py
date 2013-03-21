@@ -1,0 +1,45 @@
+<!doctype html>
+<title>Bookmarks</title>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="stylesheet" href="{{ url_for('static', filename='base.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='skeleton.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='layout.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="page container sixteen ">
+    <div class="twelve columns">
+      <h1><a href="/">Bookmarks</a></h1>
+      {% for message in get_flashed_messages() %}
+        <div class="flash">{{ message }}</div>
+      {% endfor %}
+      {% if error %}
+        <div class="flash error">{{ error }}</div>
+      {% endif %}
+    </div>
+    <div class="clear" ></div>
+    <div class="metanav four columns">
+
+      <form action="/" method="POST">
+        <h3>New Bookmark</h3>
+        <input type="text" name="title" placeholder="Title" />
+        <input type="text" name="url" placeholder="URL" />
+        <input type="text" name="desc" placeholder="Description (Optional)" />
+        <button type="submit">Add Bookmark</button>
+      </form>
+
+    </div>
+    <div class="eight columns">
+      {% block body %}{% endblock %}
+    </div>
+    <div class="metanav four columns ">
+      <form action="search" method="POST" class="search">
+        <input type="text" name="q" placeholder="enter text..." />
+        <input type="submit" value="search">
+      </form>
+      <a href="/delete"><button>Delete All Bookmarks</button></a>
+    </div>
+  </div>
+</body>
+</html>

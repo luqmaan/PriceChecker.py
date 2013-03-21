@@ -1,0 +1,16 @@
+---
+applications:
+  .:
+    name: chp9bookmarks
+    framework:
+      name: standalone
+      info:
+        mem: 64M
+        description: Standalone Application
+        exec: 
+    runtime: python2
+    command: python main.py
+    infra: aws
+    url: chp9bookmarks2
+    mem: 64M
+    instances: 1
