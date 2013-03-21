@@ -3,7 +3,8 @@ app = Flask(__name__)
 
 import pychecker.views
 
-from pychecker.database import db_session
+import pychecker.database
+
 
 # @app.teardown_request
 # def shutdown_session(exception=None):

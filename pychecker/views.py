@@ -1,9 +1,10 @@
 from pychecker import app
+from flask import render_template
 
 
 @app.route('/')
 def index():
-    return 'Hello World!'
+    return render_template('index.html', name="ya")
 
 
 @app.route('/login')
@@ -24,6 +25,11 @@ def product():
 @app.route('/product/<int:product_id>')
 def product(product_id):
     return 'product %s' % (product_id)
+
+
+@app.route('/user/')
+def user():
+    return 'add new user'
 
 
 @app.route('/user/<username>')
