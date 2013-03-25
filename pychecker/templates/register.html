@@ -1,10 +1,15 @@
 {% extends "layout.html" %}
 {% block title %}Register{% endblock %}
 {% block body %}
-<pre>{{ error }}</pre>
-<form action="" method="POST">
-<input type="text" value="username" name="username" />
-<input type="text" value="password" name="password" />
-<input type="submit" />
-</form>
+    {% if error != None %}
+        <pre>{{ error }}</pre>
+    {% endif %}
+    <form action="" method="POST">
+        <input type="text" value="username" name="username" />
+        <input type="text" value="password" name="password" />
+        <input type="text" value="email" name="email" />
+        <input type="text" value="phone" name="phone" />
+        <input type="text" value="twitter" name="twitter" />
+        <input type="submit" />
+    </form>
 {% endblock %}

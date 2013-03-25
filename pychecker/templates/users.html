@@ -1,8 +1,10 @@
 {% extends "layout.html" %}
 {% block title %}{{ title }}{% endblock %}
 {% block body %}
-<pre>{{ error }}</pre>
-{% for user in users %}
-    <li>{{ user.username }} | {{ user.password }}</li>
-{% endfor %}
+    {% if error != None %}
+        <pre>{{ error }}</pre>
+    {% endif %}
+    {% for user in users %}
+        <li>{{ user.username }} | {{ user.password }}</li>
+    {% endfor %}
 {% endblock %}

@@ -18,4 +18,3 @@ def init():
     "adds new tables to the db"
     import pychecker.models
     Base.metadata.create_all(engine)
-

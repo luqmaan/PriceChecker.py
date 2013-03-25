@@ -42,6 +42,7 @@ class User(Base):
     # list of products user is following, can also get user data by calling product.user
     following = relationship("Product", order_by='Product.id', backref="user")
 
+
     def __init__(self, username, password, email, phone, twitter):
         self.username = username
         self.password = password

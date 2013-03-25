@@ -1,1 +1,12 @@
-login.html
+{% extends "layout.html" %}
+{% block title %}Login{% endblock %}
+{% block body %}
+    {% if error != None %}
+        <pre>{{ error }}</pre>
+    {% endif %}
+    <form action="" method="POST">
+        <input type="text" value="username" name="username" />
+        <input type="text" value="password" name="password" />
+        <input type="submit" />
+    </form>
+{% endblock %}
