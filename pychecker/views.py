@@ -1,7 +1,9 @@
 from pychecker import app
 from flask import render_template
+from flask import request
 
 print app.config
+
 
 # seems like a bad idea
 @app.route('/css/<path:filename>')
@@ -12,6 +14,16 @@ def send_css(filename):
 @app.route('/')
 def index():
     return render_template('index.html', name="ya")
+
+
+@app.route('/register',  methods=['POST', 'GET'])
+def register():
+    if request.method == 'POST':
+        return "Success"
+    elif request.method == 'GET':
+        return render_template('register.html')
+    else:
+        return "error"
 
 
 @app.route('/login')
