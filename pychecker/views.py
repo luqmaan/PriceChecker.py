@@ -1,22 +1,26 @@
 from pychecker import app
 from pychecker.database import db_session
 from pychecker.models import User
+from pychecker import LoginManager
 from flask import render_template
 from flask import request
+from flask import flash
 from sqlalchemy.exc import IntegrityError
+from pychecker.forms import LoginForm
+from flask.ext.login import login_user
 
 
 def debug():
     'http://flask.pocoo.org/snippets/21/'
-    assert app.debug == False
+    assert app.debug is False
 
 
-@app.route('/')
+@app.route('/', methods=['POST', 'GET'])
 def index():
     return render_template('index.html', name="ya")
 
 
-@app.route('/register',  methods=['POST', 'GET'])
+@app.route('/register', methods=['POST', 'GET'])
 def register():
     error = None
     if request.method == 'POST':
@@ -47,12 +51,22 @@ def users():
     return render_template('users.html', users=db_users, error=error)
 
 
-@app.route('/login')
+@app.route('/login', methods=['GET', 'POST'])
 def login():
+    'http://pythonhosted.org/Flask-Login/'
     error = None
-    if request.method == "GET":
-        return render_template('login.html', error=error)
-    return 'login'
+    form = LoginForm()
+    if request.method == 'GET':
+        return render_template('login.html', form=form, error=error)
+    elif request.method == 'POST':
+        if form.validate():
+            login_user(form.user)
+            return render_template("dashboard.html", form=form, error=error)
+        else:
+            error = "Invalid username or password."
+            return render_template('login.html', form=form, error=error)
+    else:
+        return "An unknown error has occurred."
 
 
 @app.route('/logout')

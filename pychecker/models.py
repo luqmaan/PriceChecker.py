@@ -54,6 +54,15 @@ class User(Base):
         return "<User ('%s', '%s','%s', '%s', '%s')>" % \
             (self.username, self.password, self.email, self.phone, self.twitter)
 
+    def check_password(self, password):
+        return self.password == password
+
+    def is_active(self):
+        return True
+
+    def get_id(self):
+        return self.username
+
 
 class RegEx(Base):
     __tablename__ = "regexes"
