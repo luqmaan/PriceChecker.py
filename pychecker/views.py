@@ -1,14 +1,14 @@
 from pychecker import app
+from pychecker.database import db_session
+from pychecker.models import User
 from flask import render_template
 from flask import request
 
-print app.config
 
 
-# seems like a bad idea
-@app.route('/css/<path:filename>')
-def send_css(filename):
-    return send_from_directory('/static/css', filename)
+def debug():
+    'http://flask.pocoo.org/snippets/21/'
+    assert app.debug == False
 
 
 @app.route('/')
@@ -18,12 +18,23 @@ def index():
 
 @app.route('/register',  methods=['POST', 'GET'])
 def register():
+    error = None
     if request.method == 'POST':
-        return "Success"
+        u = User(request.form['username'], request.form['password'], "email", "phone", "twitter")
+        db_session.add(u)
+        db_session.commit()
+        return render_template('register.html', error=error)
     elif request.method == 'GET':
-        return render_template('register.html')
+        return render_template('register.html', error=error)
     else:
         return "error"
+
+
+@app.route('/users')
+def users():
+    error = None
+    db_users = User.query.all()
+    return render_template('users.html', users=db_users, error=error)
 
 
 @app.route('/login')
