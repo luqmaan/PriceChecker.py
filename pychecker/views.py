@@ -5,9 +5,14 @@ from pychecker import LoginManager
 from flask import render_template
 from flask import request
 from flask import flash
+from flask import redirect
+from flask import url_for
 from sqlalchemy.exc import IntegrityError
 from pychecker.forms import LoginForm
 from flask.ext.login import login_user
+from flask.ext.login import logout_user
+from flask.ext.login import login_required
+from flask.ext.login import current_user
 
 
 def debug():
@@ -54,6 +59,8 @@ def users():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     'http://pythonhosted.org/Flask-Login/'
+    if current_user.is_authenticated():
+        return redirect(request.args.get("next") or url_for("dashboard"))
     error = None
     form = LoginForm()
     if request.method == 'GET':
@@ -61,7 +68,7 @@ def login():
     elif request.method == 'POST':
         if form.validate():
             login_user(form.user)
-            return render_template("dashboard.html", form=form, error=error)
+            return redirect(request.args.get("next") or url_for("dashboard"))
         else:
             error = "Invalid username or password."
             return render_template('login.html', form=form, error=error)
@@ -71,11 +78,13 @@ def login():
 
 @app.route('/logout')
 def logout():
-    return 'logout'
+    logout_user()
+    return redirect(request.args.get("next") or url_for("index"))
 
 
 @app.route('/dashboard/')
-def product():
+@login_required
+def dashboard():
     return 'User dashboard'
 
 

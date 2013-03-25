@@ -2,6 +2,7 @@ from sqlalchemy import ForeignKey
 from sqlalchemy import Column, Date, Integer, String, Numeric
 from sqlalchemy.orm import relationship, backref
 
+from pychecker import db_session
 from pychecker.database import engine
 from pychecker.database import Base
 
@@ -58,7 +59,15 @@ class User(Base):
         return self.password == password
 
     def is_active(self):
+        'http://pythonhosted.org/Flask-Login/'
         return True
+
+    def is_authenticated(self):
+        'http://flask.pocoo.org/mailinglist/archive/2011/11/27/flask-login-question/'
+        return db_session.query(User).get(self.username) is not None
+
+    def is_anonymous(self):
+        return False
 
     def get_id(self):
         return self.username
