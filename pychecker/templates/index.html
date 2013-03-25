@@ -1,7 +1,23 @@
-<!doctype html>
-<title>Hello from Flask</title>
-{% if name %}
-  <h1>Hello {{ name }}!</h1>
-{% else %}
-  <h1>Hello World!</h1>
-{% endif %}
+{% extends "layout.html" %}
+
+{% block body %}
+  <div class="masthead" style="display: none">
+    <ul class="nav nav-pills pull-right">
+      <li class="active"><a href="#">Home</a></li>
+      <li><a href="#">About</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul>
+    <h3 class="muted">PriceChecker.py</h3>
+  </div>
+
+  <hr style="display:none">
+
+  <div class="jumbotron">
+    <h1>PriceChecker.py</h1>
+    <p class="lead">Have price checker keep track of prices for you so you don't have to!</p>
+    <a class="btn btn-large btn-info" style="margin-right: 10px" href="#">Login</a>
+    <a class="btn btn-large btn-info" href="#">Register</a>
+  </div>
+
+</div> <!-- /container -->
+{% endblock %}

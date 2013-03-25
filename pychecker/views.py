@@ -1,6 +1,13 @@
 from pychecker import app
 from flask import render_template
 
+print app.config
+
+# seems like a bad idea
+@app.route('/css/<path:filename>')
+def send_css(filename):
+    return send_from_directory('/static/css', filename)
+
 
 @app.route('/')
 def index():
