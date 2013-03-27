@@ -2,6 +2,9 @@ from sqlalchemy import ForeignKey
 from sqlalchemy import Column, Date, Integer, String, Numeric
 from sqlalchemy.orm import relationship, backref
 
+#Defaults to SHA256-Crypt under 32 bit systems, SHA512-Crypt under 64 bit systems.
+from passlib.apps import custom_app_context as pwd_context
+
 from pychecker import db_session
 from pychecker.database import engine
 from pychecker.database import Base
@@ -46,7 +49,7 @@ class User(Base):
 
     def __init__(self, username, password, email, phone, twitter):
         self.username = username
-        self.password = password
+        self.password = pwd_context.encrypt(password); # encrypts password
         self.email = email
         self.phone = phone
         self.twitter = twitter
@@ -56,7 +59,7 @@ class User(Base):
             (self.username, self.password, self.email, self.phone, self.twitter)
 
     def check_password(self, password):
-        return self.password == password
+        return pwd_context.verify(password,self.password)
 
     def is_active(self):
         'http://pythonhosted.org/Flask-Login/'
