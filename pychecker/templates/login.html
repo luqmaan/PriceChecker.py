@@ -2,7 +2,9 @@
 {% block title %}Login{% endblock %}
 {% block body %}
     {% if error != None %}
-        <pre>{{ error }}</pre>
+	{% for error in form.username.errors %}
+	    <li>{{ error }}</li>
+	{% endfor %}
     {% endif %}
     <form method="POST" action="">
         {{ form.csrf_token }}

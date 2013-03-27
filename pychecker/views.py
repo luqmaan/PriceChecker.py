@@ -2,13 +2,13 @@ from pychecker import app
 from pychecker.database import db_session
 from pychecker.models import User
 from pychecker import LoginManager
+from pychecker import forms
 from flask import render_template
 from flask import request
 from flask import flash
 from flask import redirect
 from flask import url_for
 from sqlalchemy.exc import IntegrityError
-from pychecker.forms import LoginForm
 from flask.ext.login import login_user
 from flask.ext.login import logout_user
 from flask.ext.login import login_required
@@ -62,7 +62,7 @@ def login():
     if current_user.is_authenticated():
         return redirect(request.args.get("next") or url_for("dashboard"))
     error = None
-    form = LoginForm()
+    form = forms.LoginForm()
     if request.method == 'GET':
         return render_template('login.html', form=form, error=error)
     elif request.method == 'POST':
@@ -70,7 +70,6 @@ def login():
             login_user(form.user)
             return redirect(request.args.get("next") or url_for("dashboard"))
         else:
-            error = "Invalid username or password."
             return render_template('login.html', form=form, error=error)
     else:
         return "An unknown error has occurred."
@@ -85,16 +84,33 @@ def logout():
 @app.route('/dashboard/')
 @login_required
 def dashboard():
-    return 'User dashboard'
+    error = None
+    products = current_user.following
+    form = forms.ProductForm()
+    return render_template('dashboard.html',
+			   user=current_user,
+			   products=products,
+			   form=form,
+			   error=error)
 
 
-@app.route('/product/')
+@app.route('/product/', methods=['GET', 'POST'])
 def product():
-    return 'add new product or list all products'
+    form = forms.ProductForm()
+    if request.method == 'GET':
+	return render_template('dashboard.html', form=None)
+    if request.method == 'POST':
+	if form.validate():
+	    message = "Your product has been succesfully added."
+	    return render_template('dashboard.html', message=message)
+	else:
+	    return render_template('dashboard.html')
+    else:
+	return 'add new product or list all products'
 
 
 @app.route('/product/<int:product_id>')
-def product(product_id):
+def product_id(product_id):
     return 'product %s' % (product_id)
 
 
@@ -104,5 +120,5 @@ def user():
 
 
 @app.route('/user/<username>')
-def user(username):
+def user_username(username):
     return 'user with name %s' % (username)

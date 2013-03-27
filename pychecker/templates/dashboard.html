@@ -1,1 +1,21 @@
-dashboard.html
+
+{% extends "layout.html" %}
+{% block title %}{{ user.username }}{% endblock %}
+{% block body %}
+    {{ products }}
+    {% if message != undefined %}
+	<pre>{{ message }}</pre>
+    {% endif %}
+    {% if form != undefined %}
+	<form method="POST" action="/product/">
+	    {{ form.csrf_token }}
+	    {{ form.url.label }} {{ form.url() }}
+	    {{ form.notify_price.label }} {{ form.notify_price() }}
+	    <input type="submit" value="Go">
+	</form>
+    {% else %}
+	{% for product in products %}
+	    product / use partials here
+	{% endfor %}
+    {% endif %}
+{% endblock %}

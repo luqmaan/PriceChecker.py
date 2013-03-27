@@ -1,5 +1,6 @@
 from flask.ext.wtf import Form, TextField, PasswordField, validators
 from pychecker.models import User
+from pychecker.scraper import valid_product
 
 
 class LoginForm(Form):
@@ -27,3 +28,22 @@ class LoginForm(Form):
 
         self.user = user
         return True
+
+
+class ProductForm(Form):
+    url = TextField('URL', [validators.Required()])
+    notify_price = TextField('Price to Notify', [validators.Required()])
+
+    def __init__(self, *args, **kwargs):
+	Form.__init__(self, *args, **kwargs)
+	self.user = None
+
+    def validate(self):
+	rv = Form.validate(self)
+	if not rv:
+	    return False
+
+	if not valid_product(self.url):
+	    return False
+
+	return True
