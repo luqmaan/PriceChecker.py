@@ -1,3 +1,4 @@
+{% from "_formhelpers.html" import render_field %}
 {% extends "layout.html" %}
 {% block title %}Login{% endblock %}
 {% block body %}
@@ -8,8 +9,8 @@
     {% endif %}
     <form method="POST" action="">
         {{ form.csrf_token }}
-        {{ form.username.label }} {{ form.username(size=20) }}
-        {{ form.password.label }} {{ form.password(size=20) }}
+	{{ render_field(form.username) }}
+	{{ render_field(form.password) }}
         <input type="submit" value="Go">
     </form>
 {% endblock %}

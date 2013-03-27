@@ -1,21 +1,22 @@
-
+{% from "_formhelpers.html" import render_field %}
 {% extends "layout.html" %}
-{% block title %}{{ user.username }}{% endblock %}
+{% block title %}{% if user is defined %}{{ user.username }}{% endif %}s{% endblock %}
 {% block body %}
-    {{ products }}
-    {% if message != undefined %}
+    {% if message is defined %}
 	<pre>{{ message }}</pre>
     {% endif %}
-    {% if form != undefined %}
+    {% if form is defined %}
+	<h2>Add a Product</h2>
 	<form method="POST" action="/product/">
 	    {{ form.csrf_token }}
-	    {{ form.url.label }} {{ form.url() }}
-	    {{ form.notify_price.label }} {{ form.notify_price() }}
+	    {{ render_field(form.url) }}
+	    {{ render_field(form.notify_price) }}
 	    <input type="submit" value="Go">
 	</form>
-    {% else %}
+    {% endif %}
+    <h2>Your Products</h2>
+    {{ products }}
 	{% for product in products %}
 	    product / use partials here
 	{% endfor %}
-    {% endif %}
 {% endblock %}
