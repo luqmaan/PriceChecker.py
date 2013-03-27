@@ -1,12 +1,14 @@
   body {
     padding-top: 20px;
     padding-bottom: 40px;
+    background: #E0EEEE !important;
   }
 
+  .header-custom{}
   /* Custom container */
-  .container-narrow {
+  .container-narrow, .masthead {
     margin: 0 auto;
-    max-width: 700px;
+    max-width: 950px;
   }
   .container-narrow > hr {
     margin: 30px 0;
@@ -15,11 +17,11 @@
   /* Main marketing message and sign up button */
   .jumbotron {
     margin: 60px 0;
-    text-align: center;
   }
   .jumbotron h1 {
     font-size: 72px;
-    line-height: 1;
+    line-height: 82px;
+    color: #856363;
   }
   .jumbotron .btn {
     font-size: 21px;
@@ -33,3 +35,94 @@
   .marketing p + h4 {
     margin-top: 28px;
   }
+
+  .index-header {
+  	float: left;
+  }
+
+  .sign-up {
+  	float: right;
+  	width: 280px;
+  }
+
+  .lead {
+  	font-size: 30px;
+  }
+
+  body {
+        padding-top: 40px;
+        padding-bottom: 40px;
+        background-color: #f5f5f5;
+      }
+
+     .form-signin {
+      max-width: 300px;
+        padding: 19px 29px 29px;
+        margin: 0 auto 20px;
+        background-color: #fff;
+        -webkit-border-radius: 5px;
+           -moz-border-radius: 5px;
+                border-radius: 5px;
+        -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+           -moz-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+                box-shadow: 0 1px 2px rgba(0,0,0,.05);
+      }
+      .form-signin .form-signin-heading,
+      .form-signin .checkbox, .pricepy-heading {
+        margin-bottom: 10px;
+        color: #696969;
+      }
+      .form-signin input[type="text"],
+      .form-signin input[type="password"] {
+        font-size: 16px;
+        height: auto;
+        margin-bottom: 15px;
+        padding: 7px 9px;
+      }
+
+ .custom-btn, .custom-btn:hover {
+ 	display: inline-block;
+margin-right: 1.8em;
+height: 50px;
+line-height: 50px;
+padding: 0px;
+
+ 	color: #ffffff;
+border-radius: 3px;
+background-color: #68838B;
+-webkit-box-shadow: 0px 2px 4px 0 rgba(0,0,0,0.5),inset 0px -1px 0px 0 #ccc,inset 0px 1px 0px 0 #fff;
+-moz-box-shadow: 0px 2px 4px 0 rgba(0,0,0,0.5),inset 0px -1px 0px 0 #ccc,inset 0px 1px 0px 0 #fff;
+-o-box-shadow: 0px 2px 4px 0 rgba(0,0,0,0.5),inset 0px -1px 0px 0 #ccc,inset 0px 1px 0px 0 #fff;
+box-shadow: 0px 2px 4px 0 rgba(0,0,0,0.5),inset 0px -1px 0px 0 #ccc,inset 0px 1px 0px 0 #fff;
+
+
+padding: 0 1.2em;
+height: 2.0em;
+display: inline-block;
+font-family: "Arial",sans-serif;
+font-size: 1.7em;
+font-weight: bold;
+text-decoration: none;
+text-align: center;
+-webkit-font-smoothing: antialiased;
+text-rendering: optimizeLegibility;
+line-height: 2.0em;
+border: none;
+-webkit-appearance: none;
+box-sizing: border-box;
+-webkit-border-radius: 0.25em;
+-moz-border-radius: 0.25em;
+border-radius: 0.25em;
+border: 0;
+_height: 3.40em;
+ }
+
+ .nav-pills > li > a, .nav-pills > li > a:hover {
+ 	color: #68838B;
+ 	font-size: 12pt;
+ 	font-weight: bold;
+ }
+
+.nav-pills > li > a:hover {
+ 	background: none;
+ }
