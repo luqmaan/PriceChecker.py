@@ -15,8 +15,7 @@
 	</form>
     {% endif %}
     <h2>Your Products</h2>
-    {{ products }}
 	{% for product in products %}
-	    product / use partials here
+	<li>{{ product }}</li>
 	{% endfor %}
 {% endblock %}

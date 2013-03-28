@@ -9,6 +9,8 @@ from flask import flash
 from flask import redirect
 from flask import url_for
 from sqlalchemy.exc import IntegrityError
+from sqlalchemy.exc import InvalidRequestError
+from sqlalchemy.exc import SQLAlchemyError
 from flask.ext.login import login_user
 from flask.ext.login import logout_user
 from flask.ext.login import login_required
@@ -29,11 +31,11 @@ def index():
 def register():
     error = None
     if request.method == 'POST':
-	u = models.User(request.form['username'],
-			request.form['password'],
-			request.form['email'],
-			request.form['phone'],
-			request.form['twitter'])
+        u = models.User(request.form['username'],
+                        request.form['password'],
+                        request.form['email'],
+                        request.form['phone'],
+                        request.form['twitter'])
         db_session.add(u)
         try:
             db_session.commit()
@@ -88,10 +90,10 @@ def dashboard():
     products = current_user.following
     form = forms.ProductForm()
     return render_template('dashboard.html',
-			   user=current_user,
-			   products=products,
-			   form=form,
-			   error=error)
+                           user=current_user,
+                           products=products,
+                           form=form,
+                           error=error)
 
 
 @app.route('/product/', methods=['GET', 'POST'])
@@ -100,32 +102,34 @@ def product():
     products = current_user.following
     form = forms.ProductForm()
     if request.method == 'GET':
-	return render_template('dashboard.html', form=None)
+        return redirect(request.args.get("next") or url_for("dashboard"))
     if request.method == 'POST':
-	if form.validate():
-	    new_product = models.Product(user_id=current_user.get_id(),
-					 name="Test name",
-					 url=form.url,
-					 currentPrice="Test price",
-					 notifyPrice=form.notify_price)
-	    db_session.add(new_product)
-	    try:
-		db_session.commit()
-	    except IntegrityError, e:
-		# this shouldn't happen, should get rid of this
-		message = "Sorry, the product/username " + request.form['username'] + " is already taken."
-	    except Exception, e:
-		message = e
-	    else:
-		message = "Your product has been succesfully added."
-	    return render_template('dashboard.html',
-				   message=message,
-				   products=products,
-				   user=user)
-	else:
-	    return render_template('dashboard.html', form=form)
+        if form.validate():
+            new_product = models.Product(user_id=current_user.get_id(),
+                                         name="Test name",
+                                         url=form.url.data,
+                                         currentPrice="Test price",
+                                         notifyPrice=form.notify_price.data)
+            try:
+                db_session.add(new_product)
+                db_session.commit()
+                db_session.flush()
+            except (IntegrityError, InvalidRequestError) as e:
+                # this shouldn't happen, should get rid of this
+                message = "Sorry, the product/username " + request.form['username'] + " is already taken."
+            except (Exception) as e:
+                message = e
+            else:
+                message = "Your product has been succesfully added."
+            # products = current_user.following
+            return render_template('dashboard.html',
+                                   message=message,
+                                   products=products,
+                                   user=user)
+        else:
+            return render_template('dashboard.html', form=form)
     else:
-	return 'An unknown error has occurred.'
+        return 'An unknown error has occurred.'
 
 
 @app.route('/product/<int:product_id>')
