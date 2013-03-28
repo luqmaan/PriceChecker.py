@@ -106,7 +106,7 @@ def product():
     if request.method == 'POST':
         if form.validate():
             new_product = models.Product(user_id=current_user.get_id(),
-                                         name="Test name",
+					 name="ProductName",
                                          url=form.url.data,
                                          currentPrice="Test price",
                                          notifyPrice=form.notify_price.data)
@@ -121,11 +121,11 @@ def product():
                 message = e
             else:
                 message = "Your product has been succesfully added."
-            # products = current_user.following
-            return render_template('dashboard.html',
-                                   message=message,
-                                   products=products,
-                                   user=user)
+		# products = current_user.following
+		return render_template('dashboard.html',
+				       message=message,
+				       products=products,
+				       user=user)
         else:
             return render_template('dashboard.html', form=form)
     else:
