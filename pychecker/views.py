@@ -27,7 +27,7 @@ def index():
     return render_template('index.html', name="ya")
 
 
-@app.route('/register', methods=['POST', 'GET'])
+@app.route('/register/', methods=['POST', 'GET'])
 def register():
     error = None
     if request.method == 'POST':
@@ -51,14 +51,14 @@ def register():
         return render_template('register.html', error=error)
 
 
-@app.route('/users')
+@app.route('/users/')
 def users():
     error = None
     db_users = models.User.query.all()
     return render_template('users.html', users=db_users, error=error)
 
 
-@app.route('/login', methods=['GET', 'POST'])
+@app.route('/login/', methods=['GET', 'POST'])
 def login():
     'http://pythonhosted.org/Flask-Login/'
     if current_user.is_authenticated():
@@ -77,7 +77,7 @@ def login():
         return "An unknown error has occurred."
 
 
-@app.route('/logout')
+@app.route('/logout/')
 def logout():
     logout_user()
     return redirect(request.args.get("next") or url_for("index"))
@@ -106,7 +106,7 @@ def product():
     if request.method == 'POST':
         if form.validate():
             new_product = models.Product(user_id=current_user.get_id(),
-					 name="ProductName",
+                                         name="ProductName",
                                          url=form.url.data,
                                          currentPrice="Test price",
                                          notifyPrice=form.notify_price.data)
@@ -121,18 +121,18 @@ def product():
                 message = e
             else:
                 message = "Your product has been succesfully added."
-		# products = current_user.following
-		return render_template('dashboard.html',
-				       message=message,
-				       products=products,
-				       user=user)
+                # products = current_user.following
+                return render_template('dashboard.html',
+                                       message=message,
+                                       products=products,
+                                       user=user)
         else:
             return render_template('dashboard.html', form=form)
     else:
         return 'An unknown error has occurred.'
 
 
-@app.route('/product/<int:product_id>')
+@app.route('/product/<int:product_id>/')
 def product_id(product_id):
     return 'product %s' % (product_id)
 
@@ -142,6 +142,6 @@ def user():
     return 'add new user'
 
 
-@app.route('/user/<username>')
+@app.route('/user/<username>/')
 def user_username(username):
     return 'user with name %s' % (username)
