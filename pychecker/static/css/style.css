@@ -133,24 +133,25 @@
  }
 
  input.add-product {
- 	height: 70px; 
- 	font-size: 40px;
+ 	height: 50px; 
+ 	font-size: 30px;
  	width: 78%;
  	-webkit-border-radius: 0.25em !important;
 	-moz-border-radius: 0.25em !important;
  }
 
  button.add-product, button.add-product:hover {
-	height: 80px;
+	height: 60px;
 	margin-left: 10px;
 	margin-right: 0px !important;
 	width: 16%;
  }
 
  .title-header {
+ 	margin-top: 15px;
  	padding-top: 10px;
  	padding-bottom: 10px;
- 	background-color: #856363;
+ 	background-color: #9DB7BF;
  }
 
  .title-header h1{
@@ -161,9 +162,50 @@
 
  .product {
  	float: left;
-	padding: 1.4em;
+	padding: 1.2em;
 	padding-bottom: 0.5em;
 	margin-bottom: 1.5em;
 	margin-right: 1.6em;
-	width: 20.0em;
+	width: 26.404255319149%;
+	margin: 0 2.12766% 30px 0;
+ }
+
+
+ .products {
+ 	list-style: none;
+ }
+
+ .product-box {
+ 	position: relative;
+	clear: left;
+	background: #fff;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	-webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.07);
+	-moz-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.07);
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.07);
+ }
+
+ .product-box div {
+ 	padding: 10px 10px 1px 10px;  
+ }
+
+.product-price {
+	font-size: 16px;
+ 	font-weight: bold;
+ 	margin-top: 10px;
+ 	margin-right: 5px;
+ 	line-height: auto !important;
+ 	text-align: right;
+ 	color: #696969;
+ }
+
+ .product-name {
+ 	margin: 0 0 15px 0;
+	text-align: left;
+	font-family: 'Libre Baskerville';
+	font-size: 10pt;
+	border-bottom: 1px solid #ccc;
+	font-weight: bold;
  }
