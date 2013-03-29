@@ -1,21 +1,32 @@
 {% from "_formhelpers.html" import render_field %}
 {% extends "layout.html" %}
 {% block title %}{% if user is defined %}{{ user.username }}{% endif %}s{% endblock %}
+{% block pagetitle %} <div class="title-header">
+	<div class="container-narrow">
+		<h1>Dashboard</h1>
+	</div>
+</div>{% endblock %}
 {% block body %}
     {% if message is defined %}
 	<pre>{{ message }}</pre>
     {% endif %}
     {% if form is defined %}
-	<h2>Add a Product</h2>
+	<h2 class="custom-h2">Add a Product</h2>
+	<form class="form-search" style="align:center">           <input type="text" class="add-product search-query">
+           <button type="submit" class="custom-btn add-product">Submit</button>
+    <div style="">
 	<form method="POST" action="/product/">
 	    {{ form.csrf_token }}
 	    {{ render_field(form.url) }}
 	    {{ render_field(form.notify_price) }}
 	    <input type="submit" value="Go">
-	</form>
+	</form></div>
     {% endif %}
-    <h2>Your Products</h2>
+   	<hr>
+    <h2 class="custom-h2">Your Products</h2>
+    <ul>
 	{% for product in products %}
-	<li>{{ product }}</li>
+	<li class="product">{{ product }}</li>
 	{% endfor %}
+</ul>
 {% endblock %}
