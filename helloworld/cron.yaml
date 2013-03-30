@@ -1,0 +1,5 @@
+cron:
+- description: Email
+  url: /
+  schedule: every 15 minutes synchronized
+
