@@ -1,6 +1,8 @@
 from flask.ext.wtf import Form, TextField, PasswordField, validators
 from pychecker.models import User
 from pychecker.scraper import valid_product
+from pychecker.database import db_session
+from pychecker import models
 
 
 class LoginForm(Form):
@@ -16,8 +18,8 @@ class LoginForm(Form):
         if not rv:
             return False
 
-        user = User.query.filter_by(
-            username=self.username.data).first()
+        user = db_session.query(models.User).filter(models.User.username == self.username.data).first()
+
         if user is None:
             self.username.errors.append('Unknown username')
             return False
@@ -35,15 +37,15 @@ class ProductForm(Form):
     notify_price = TextField('Price to Notify', [validators.Required()])
 
     def __init__(self, *args, **kwargs):
-	Form.__init__(self, *args, **kwargs)
-	self.user = None
+        Form.__init__(self, *args, **kwargs)
+        self.user = None
 
     def validate(self):
-	rv = Form.validate(self)
-	if not rv:
-	    return False
+        rv = Form.validate(self)
+        if not rv:
+            return False
 
-	if not valid_product(self.url):
-	    return False
+        if not valid_product(self.url):
+            return False
 
-	return True
+        return True

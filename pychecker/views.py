@@ -33,26 +33,42 @@ def index():
 @app.route('/register/', methods=['POST', 'GET'])
 def register():
     error = None
+    db_users = db_session.query(models.User).all()
     if request.method == 'POST':
-        u = models.User(request.form['username'],
-                        request.form['password'],
-                        request.form['email'],
-                        request.form['phone'],
-                        request.form['twitter'])
-        db_session.add(u)
-        try:
-            db_session.commit()
-        except IntegrityError, e:
+        already_exists = db_session.query(models.User).filter(
+            models.User.username == request.form['username'])
+        if (already_exists.count() > 0):
             error = "Sorry, the username " + request.form['username'] + \
-                    " is already taken."
-        except Exception, e:
-            error = e
-        return render_template('register.html', error=error)
+                    " is already taken. \n"
+        else:
+            u = models.User(request.form['username'],
+                            request.form['password'],
+                            request.form['email'],
+                            request.form['phone'],
+                            request.form['twitter'])
+            db_session.add(u)
+            try:
+                db_session.commit()
+            except (IntegrityError, SQLAlchemyError, Exception) as e:
+                error = "Sorry, the username " + request.form['username'] + \
+                        " is already taken. \n" + str(e)
+                db_session.rollback()
+            db_users = db_session.query(models.User).all()
+        return render_template('register.html',
+                               error=error,
+                               user=current_user,
+                               users=db_users)
     elif request.method == 'GET':
-        return render_template('register.html', error=error)
+        return render_template('register.html',
+                               error=error,
+                               user=current_user,
+                               users=db_users)
     else:
         error = "An unknown error has occurred."
-        return render_template('register.html', error=error, user=current_user)
+        return render_template('register.html',
+                               error=error,
+                               user=current_user,
+                               users=db_users)
 
 
 @app.route('/users/')
@@ -74,6 +90,7 @@ def login():
     elif request.method == 'POST':
         if form.validate():
             login_user(form.user)
+            # raise
             return redirect(request.args.get("next") or url_for("dashboard"))
         else:
             return render_template('login.html', form=form, error=error, user=current_user)
@@ -88,9 +105,8 @@ def logout():
 
 
 @app.route('/dashboard/')
-@login_required
 def dashboard():
-    products = current_user.following
+    products = current_user.products
     form = forms.ProductForm()
     return render_template('dashboard.html',
                            user=current_user,
@@ -111,7 +127,7 @@ def product():
                                          currentPrice="Test price",
                                          notifyPrice=form.notify_price.data)
 
-            # new_product.users.append(current_user)
+            new_product.users.append(current_user)
             # current_user.append(new_product)
             try:
                 db_session.add(new_product)
@@ -124,9 +140,9 @@ def product():
                 message = e
             else:
                 message = "Your product has been succesfully added."
-                # products = current_user.following
+                # products = current_user.products
 
-            products = current_user.following
+            products = current_user.products
 
             return render_template('dashboard.html',
                                    message=message,
@@ -142,11 +158,6 @@ def product():
 @app.route('/product/<int:product_id>/')
 def product_id(product_id):
     return 'product %s' % (product_id)
-
-
-@app.route('/user/')
-def user():
-    return 'add new user'
 
 
 @app.route('/user/<username>/')

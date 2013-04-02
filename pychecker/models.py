@@ -10,19 +10,19 @@ from pychecker import db_session
 from pychecker.database import Base
 
 # http://docs.sqlalchemy.org/en/latest/orm/relationships.html#many-to-many
-association_table = Table('association', Base.metadata,
-			  Column('product_id', Integer, ForeignKey('products.id')),
-			  Column('user_id', Integer, ForeignKey('users.id')))
+usersproducts_table = Table('userproducts', Base.metadata,
+                            Column('product_id', Integer, ForeignKey('products.id')),
+                            Column('user_id', Integer, ForeignKey('users.id')))
 
 
 class Product(Base):
     __tablename__ = "products"
 
-    id = Column(Integer)  # id, need to have even if null
+    id = Column(Integer, primary_key=True, nullable=False)  # id, need to have even if null
     name = Column(String)  # name of product
-    url = Column(String, primary_key=True)  # url of product/key
+    url = Column(String, unique=True)  # url of product/key
     currentPrice = Column(String)  # current price of product
-    users = relationship("Product", backref="products", secondary=association_table)
+    users = relationship("Product", secondary=lambda: usersproducts_table)
     notifyPrice = Column(String)  # price at which a notification should be sent
 
     def __init__(self, name, url, currentPrice, notifyPrice):
@@ -39,8 +39,8 @@ class Product(Base):
 class User(Base):
     __tablename__ = "users"
 
-    id = Column(Integer)  # id, need to have even if null...
-    username = Column(String, primary_key=True)  # username/key
+    id = Column(Integer, primary_key=True, nullable=False)  # id, need to have even if null...
+    username = Column(String, unique=True)  # username/key
     password = Column(String)  # password
     email = Column(String)  # user's email
     phone = Column(String)  # user's phone number
@@ -48,15 +48,12 @@ class User(Base):
     # accessTokens = Column() #dunnno what these are
 
     # list of products user is following, can also get user data by calling product.user
-    following = relationship("Product",
-			     order_by='Product.id',
-			     backref="user",
-			     secondary=association_table)
+    products = relationship("Product", secondary=lambda: usersproducts_table)
 
     def __init__(self, username, password, email, phone, twitter):
         self.username = username
-	self.password = pwd_context.encrypt(password)
-	# encrypts password
+        self.password = pwd_context.encrypt(password)
+        # encrypts password
         self.email = email
         self.phone = phone
         self.twitter = twitter
@@ -66,7 +63,7 @@ class User(Base):
             (self.username, self.password, self.email, self.phone, self.twitter)
 
     def check_password(self, password):
-	return pwd_context.verify(password, self.password)
+        return pwd_context.verify(password, self.password)
 
     def is_active(self):
         'http://pythonhosted.org/Flask-Login/'
@@ -85,7 +82,7 @@ class User(Base):
 
 class RegEx(Base):
     __tablename__ = "regexes"
-    id = Column(Integer, primary_key=True)  # id/key
+    id = Column(Integer, primary_key=True, nullable=False)  # id/key
     siteurl = Column(String)  # url of site, maybe make associated with product urls?
     regex = Column(String)  # regex
 

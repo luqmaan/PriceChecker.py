@@ -3,13 +3,13 @@ from flask.ext.login import LoginManager
 app = Flask(__name__)
 
 from pychecker.database import db_session
-from pychecker.models import User
 from pychecker.config import secret_key
+from pychecker import models
 from pychecker import database
 from pychecker import views
 
 # run this line when the models have changed
-# database.init()
+database.init()
 
 app.config['TRAP_BAD_REQUEST_ERRORS'] = True
 app.secret_key = secret_key
@@ -19,8 +19,8 @@ login_manager.setup_app(app)
 
 
 @login_manager.user_loader
-def load_user(user_id):
-    return db_session.query(User).get(user_id)
+def load_user(username):
+    return db_session.query(models.User).filter(username == username).first()
 
 
 @app.teardown_request
