@@ -49,6 +49,10 @@
   	width: 280px;
   }
 
+  .login {
+    margin-top: 100px;
+  }
+
   .lead {
   	font-size: 30px;
   }
@@ -157,7 +161,7 @@
  .title-header h1{
  	font-size: 72px;
     line-height: 82px;
-    color: #E0EEEE;
+    color: #ffffff;
  }
 
  .product {

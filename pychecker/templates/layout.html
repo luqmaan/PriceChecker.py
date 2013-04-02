@@ -28,8 +28,9 @@
         <div class="masthead">
             <ul class="nav nav-pills pull-right">
               <li><a href="#">About</a></li>
-              <li><a href="#">Sign up</a></li>
-              <li><a href="#">Login</a></li>
+              {% if user is defined and user.is_authenticated() %}<li><a href="/logout">Logout</a></li>
+              {% else %} <li><a href="/login">Login</a></li>
+              {% endif %}
             </ul>
             <h3 class="pricepy-heading"><a href="/">Pychecker</a></h3>
         </div>

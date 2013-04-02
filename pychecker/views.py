@@ -24,7 +24,8 @@ def debug():
 
 @app.route('/', methods=['POST', 'GET'])
 def index():
-    return render_template('index.html', name="ya")
+    # raise
+    return render_template('index.html', name="ya", user=current_user)
 
 
 @app.route('/register/', methods=['POST', 'GET'])
@@ -48,14 +49,14 @@ def register():
         return render_template('register.html', error=error)
     else:
         error = "An unknown error has occurred."
-        return render_template('register.html', error=error)
+        return render_template('register.html', error=error, user=current_user)
 
 
 @app.route('/users/')
 def users():
     error = None
     db_users = models.User.query.all()
-    return render_template('users.html', users=db_users, error=error)
+    return render_template('users.html', users=db_users, error=error, user=current_user)
 
 
 @app.route('/login/', methods=['GET', 'POST'])
@@ -72,7 +73,7 @@ def login():
             login_user(form.user)
             return redirect(request.args.get("next") or url_for("dashboard"))
         else:
-            return render_template('login.html', form=form, error=error)
+            return render_template('login.html', form=form, error=error, user=current_user)
     else:
         return "An unknown error has occurred."
 

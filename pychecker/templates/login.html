@@ -7,10 +7,20 @@
 	    <li>{{ error }}</li>
 	{% endfor %}
     {% endif %}
-    <form method="POST" action="">
+    <form method="POST" action="" style="display:">
         {{ form.csrf_token }}
 	{{ render_field(form.username) }}
 	{{ render_field(form.password) }}
         <input type="submit" value="Go">
     </form>
+
+    <div class="login">
+      <form class="form-signin" method="POST" action="">
+        <h3 class="form-signin-heading">Welcome!</h2>
+        <input type="text" class="input-block-level" placeholder="Username">
+        <input type="password" class="input-block-level" placeholder="Password">
+        <button class="custom-btn" type="submit">Log In</button>
+      </form>
+    </div>
+  </div>
 {% endblock %}
