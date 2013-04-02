@@ -12,10 +12,11 @@
     {% endif %}
     {% if form is defined %}
 	<h2 class="custom-h2">Add a Product</h2>
-	<form class="form-search" style="align:center">           <input type="text" class="add-product search-query">
+	<form class="form-search" style="align:center"  method="POST" action="/product/">
+		<input type="text" class="add-product search-query">
            <button type="submit" class="custom-btn add-product">Submit</button>
-    <div style="display: none">
-	<form method="POST" action="/product/">
+    <div style="">
+	<form>
 	    {{ form.csrf_token }}
 	    {{ render_field(form.url) }}
 	    {{ render_field(form.notify_price) }}
@@ -26,7 +27,7 @@
     <h2 class="custom-h2">Your Products</h2>
     <ul class="products">
 	{% for product in products %}
-	<li class="product">{{ product }}</li>
+		<li class="product">{{ product }}</li>
 	{% endfor %}
 	<li class="product">
 		<div class="product-box">

@@ -16,5 +16,5 @@ Base.query = db_session.query_property()
 
 def init():
     "adds new tables to the db"
-    import pychecker.models
+    from pychecker import models
     Base.metadata.create_all(engine)

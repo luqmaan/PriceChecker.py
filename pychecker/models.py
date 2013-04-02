@@ -1,13 +1,18 @@
 from sqlalchemy import ForeignKey
 from sqlalchemy import Column, Date, Integer, String, Numeric
 from sqlalchemy.orm import relationship, backref
+from sqlalchemy.schema import Table
 
-#Defaults to SHA256-Crypt under 32 bit systems, SHA512-Crypt under 64 bit systems.
+# Defaults to SHA256-Crypt under 32 bit systems, SHA512-Crypt under 64 bit systems.
 from passlib.apps import custom_app_context as pwd_context
 
 from pychecker import db_session
-from pychecker.database import engine
 from pychecker.database import Base
+
+# http://docs.sqlalchemy.org/en/latest/orm/relationships.html#many-to-many
+association_table = Table('association', Base.metadata,
+			  Column('product_id', Integer, ForeignKey('products.id')),
+			  Column('user_id', Integer, ForeignKey('users.id')))
 
 
 class Product(Base):
@@ -17,11 +22,10 @@ class Product(Base):
     name = Column(String)  # name of product
     url = Column(String, primary_key=True)  # url of product/key
     currentPrice = Column(String)  # current price of product
-    user_id = Column(Integer, ForeignKey('users.username'), primary_key=True)  # id of user following
+    users = relationship("Product", backref="products", secondary=association_table)
     notifyPrice = Column(String)  # price at which a notification should be sent
 
-    def __init__(self, user_id, name, url, currentPrice, notifyPrice):
-        self.user_id = user_id
+    def __init__(self, name, url, currentPrice, notifyPrice):
         self.name = name
         self.url = url
         self.currentPrice = currentPrice
@@ -44,12 +48,15 @@ class User(Base):
     # accessTokens = Column() #dunnno what these are
 
     # list of products user is following, can also get user data by calling product.user
-    following = relationship("Product", order_by='Product.id', backref="user")
-
+    following = relationship("Product",
+			     order_by='Product.id',
+			     backref="user",
+			     secondary=association_table)
 
     def __init__(self, username, password, email, phone, twitter):
         self.username = username
-        self.password = pwd_context.encrypt(password); # encrypts password
+	self.password = pwd_context.encrypt(password)
+	# encrypts password
         self.email = email
         self.phone = phone
         self.twitter = twitter
@@ -59,7 +66,7 @@ class User(Base):
             (self.username, self.password, self.email, self.phone, self.twitter)
 
     def check_password(self, password):
-        return pwd_context.verify(password,self.password)
+	return pwd_context.verify(password, self.password)
 
     def is_active(self):
         'http://pythonhosted.org/Flask-Login/'
@@ -88,4 +95,3 @@ class RegEx(Base):
 
     def __repr__(self):
         return "<Regex ('%s', '%s'>" % (self.siteurl, self.regex)
-

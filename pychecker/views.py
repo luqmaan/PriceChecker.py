@@ -24,8 +24,10 @@ def debug():
 
 @app.route('/', methods=['POST', 'GET'])
 def index():
-    # raise
-    return render_template('index.html', name="ya", user=current_user)
+    if current_user.is_authenticated():
+        return redirect(url_for("dashboard"))
+    else:
+        return render_template('index.html', name="ya")
 
 
 @app.route('/register/', methods=['POST', 'GET'])
@@ -41,7 +43,8 @@ def register():
         try:
             db_session.commit()
         except IntegrityError, e:
-            error = "Sorry, the username " + request.form['username'] + " is already taken."
+            error = "Sorry, the username " + request.form['username'] + \
+                    " is already taken."
         except Exception, e:
             error = e
         return render_template('register.html', error=error)
@@ -87,46 +90,49 @@ def logout():
 @app.route('/dashboard/')
 @login_required
 def dashboard():
-    error = None
     products = current_user.following
     form = forms.ProductForm()
     return render_template('dashboard.html',
                            user=current_user,
                            products=products,
-                           form=form,
-                           error=error)
+                           form=form)
 
 
 @app.route('/product/', methods=['GET', 'POST'])
 def product():
     message = None
-    products = current_user.following
     form = forms.ProductForm()
     if request.method == 'GET':
         return redirect(request.args.get("next") or url_for("dashboard"))
     if request.method == 'POST':
         if form.validate():
-            new_product = models.Product(user_id=current_user.get_id(),
-                                         name="ProductName",
+            new_product = models.Product(name="ProductName",
                                          url=form.url.data,
                                          currentPrice="Test price",
                                          notifyPrice=form.notify_price.data)
+
+            # new_product.users.append(current_user)
+            # current_user.append(new_product)
             try:
                 db_session.add(new_product)
                 db_session.commit()
                 db_session.flush()
             except (IntegrityError, InvalidRequestError) as e:
                 # this shouldn't happen, should get rid of this
-                message = "Sorry, the product/username " + request.form['username'] + " is already taken."
+                message = "Sorry, there was an error." + str(e)
             except (Exception) as e:
                 message = e
             else:
                 message = "Your product has been succesfully added."
                 # products = current_user.following
-                return render_template('dashboard.html',
-                                       message=message,
-                                       products=products,
-                                       user=user)
+
+            products = current_user.following
+
+            return render_template('dashboard.html',
+                                   message=message,
+                                   products=products,
+                                   user=user,
+                                   form=form)
         else:
             return render_template('dashboard.html', form=form)
     else:
