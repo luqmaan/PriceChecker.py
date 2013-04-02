@@ -14,7 +14,7 @@
 	<h2 class="custom-h2">Add a Product</h2>
 	<form class="form-search" style="align:center">           <input type="text" class="add-product search-query">
            <button type="submit" class="custom-btn add-product">Submit</button>
-    <div style="">
+    <div style="display: none">
 	<form method="POST" action="/product/">
 	    {{ form.csrf_token }}
 	    {{ render_field(form.url) }}
