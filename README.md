@@ -1,14 +1,11 @@
 PriceChecker.py
 ===============
 
-Python Dependencies
---
-pyquery => `pip install pyquery`
-
-A library that allows jquery-like dom selectors that might be easier to create, maintain, and store
-
+@TODO: The POST url is currently hard-coded in marklet.js
 
 Chrome Extension Installation
+Even though we probably won't be using this in for this project..it's cool to have I think.
+
 --
 
 - Open Chrome Settings
