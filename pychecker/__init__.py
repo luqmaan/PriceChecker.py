@@ -20,7 +20,7 @@ login_manager.setup_app(app)
 
 @login_manager.user_loader
 def load_user(username):
-    return db_session.query(models.User).filter(username == username).first()
+    return db_session.query(models.User).filter(models.User.username == username).first()
 
 
 @app.teardown_request

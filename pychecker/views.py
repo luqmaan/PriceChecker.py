@@ -89,8 +89,9 @@ def login():
         return render_template('login.html', form=form, error=error)
     elif request.method == 'POST':
         if form.validate():
+            # import pdb
+            # pdb.set_trace()
             login_user(form.user)
-            # raise
             return redirect(request.args.get("next") or url_for("dashboard"))
         else:
             return render_template('login.html', form=form, error=error, user=current_user)
@@ -106,9 +107,9 @@ def logout():
 
 @app.route('/dashboard/')
 def dashboard(message=None, form=None):
-    products = current_user.products
     if form is None:
         form = forms.ProductForm()
+    products = current_user.products
     return render_template('dashboard.html',
                            user=current_user,
                            products=products,
@@ -131,14 +132,15 @@ def product():
                                          notifyPrice=form.notify_price.data,
                                          image="/static/img/screenshot.jpg")
 
-            # new_product.users.append(current_user)
-            # current_user.append(new_product)
+            new_product.users.append(current_user)
+
+            a = current_user
 
             try:
                 db_session.add(new_product)
                 db_session.commit()
             except (IntegrityError) as e:
-                message = "A product with this URL already exists: " + request.form['url']
+                message = "A product with this URL already exists: " + request.form['url'] + "\n\n" + str(e)
                 db_session.rollback()
             except (InvalidRequestError, Exception) as e:
                 message = "Sorry, there was an error." + str(e)

@@ -12,7 +12,8 @@ from pychecker.database import Base
 # http://docs.sqlalchemy.org/en/latest/orm/relationships.html#many-to-many
 usersproducts_table = Table('userproducts', Base.metadata,
                             Column('username', Integer, ForeignKey('users.username')),
-                            Column('url', Integer, ForeignKey('products.url')))
+                            Column('url', Integer, ForeignKey('products.url')),
+                            Column('userproduct_id', Integer, primary_key=True, nullable=False))
 
 
 class Product(Base):
@@ -22,7 +23,7 @@ class Product(Base):
     name = Column(String)  # name of product
     url = Column(String, unique=True)  # url of product/key
     currentPrice = Column(String)  # current price of product
-    users = relationship("User", secondary=lambda: usersproducts_table)
+    users = relationship("User", secondary=usersproducts_table)
     notifyPrice = Column(String)  # price at which a notification should be sent
     image = Column(String)  # path to the image
 
@@ -50,7 +51,7 @@ class User(Base):
     # accessTokens = Column() #dunnno what these are
 
     # list of products user is following, can also get user data by calling product.user
-    products = relationship("Product", secondary=lambda: usersproducts_table)
+    products = relationship("Product", secondary=usersproducts_table)
 
     def __init__(self, username, password, email, phone, twitter):
         self.username = username

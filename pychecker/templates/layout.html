@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
-
+    <meta name="google" content="notranslate" />
     <!-- Le styles -->
     <link href="{{ url_for('static', filename='css/bootstrap.css') }}" rel="stylesheet">
     <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
@@ -27,9 +27,11 @@
     <div class="header-custom">
         <div class="masthead">
             <ul class="nav nav-pills pull-right">
-              <li><a href="#">About</a></li>
-              {% if user is defined and user.is_authenticated() %}<li><a href="/logout">Logout</a></li>
-              {% else %} <li><a href="/login">Login</a></li>
+              {% if user is defined and user.is_authenticated() %}
+                <li><a href="/user">{{ user.username }}</a></li>
+                <li><a href="/logout">Logout</a></li>
+              {% else %}
+                <li><a href="/login">Login</a></li>
               {% endif %}
             </ul>
             <h3 class="pricepy-heading"><a href="/">Pychecker</a></h3>
