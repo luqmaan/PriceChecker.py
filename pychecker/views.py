@@ -16,6 +16,7 @@ from flask.ext.login import logout_user
 from flask.ext.login import login_required
 from flask.ext.login import current_user
 
+
 def debug():
     'http://flask.pocoo.org/snippets/21/'
     assert app.debug is False
@@ -104,16 +105,19 @@ def logout():
 
 
 @app.route('/dashboard/')
-def dashboard():
+def dashboard(message=None, form=None):
     products = current_user.products
-    form = forms.ProductForm()
+    if form is None:
+        form = forms.ProductForm()
     return render_template('dashboard.html',
                            user=current_user,
                            products=products,
-                           form=form)
+                           form=form,
+                           message=message)
 
 
 @app.route('/product/', methods=['GET', 'POST'])
+@login_required
 def product():
     message = None
     form = forms.ProductForm()
@@ -124,30 +128,26 @@ def product():
             new_product = models.Product(name="ProductName",
                                          url=form.url.data,
                                          currentPrice="Test price",
-                                         notifyPrice=form.notify_price.data)
+                                         notifyPrice=form.notify_price.data,
+                                         image="/static/img/screenshot.jpg")
 
-            new_product.users.append(current_user)
+            # new_product.users.append(current_user)
             # current_user.append(new_product)
+
             try:
                 db_session.add(new_product)
                 db_session.commit()
-                db_session.flush()
-            except (IntegrityError, InvalidRequestError) as e:
-                # this shouldn't happen, should get rid of this
+            except (IntegrityError) as e:
+                message = "A product with this URL already exists: " + request.form['url']
+                db_session.rollback()
+            except (InvalidRequestError, Exception) as e:
                 message = "Sorry, there was an error." + str(e)
-            except (Exception) as e:
-                message = e
+                db_session.rollback()
             else:
                 message = "Your product has been succesfully added."
-                # products = current_user.products
 
-            products = current_user.products
+            return dashboard(message=message, form=form)
 
-            return render_template('dashboard.html',
-                                   message=message,
-                                   products=products,
-                                   user=current_user,
-                                   form=form)
         else:
             return render_template('dashboard.html', form=form)
     else:

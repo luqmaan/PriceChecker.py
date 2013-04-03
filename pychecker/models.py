@@ -11,8 +11,8 @@ from pychecker.database import Base
 
 # http://docs.sqlalchemy.org/en/latest/orm/relationships.html#many-to-many
 usersproducts_table = Table('userproducts', Base.metadata,
-                            Column('product_id', Integer, ForeignKey('products.id')),
-                            Column('user_id', Integer, ForeignKey('users.id')))
+                            Column('username', Integer, ForeignKey('users.username')),
+                            Column('url', Integer, ForeignKey('products.url')))
 
 
 class Product(Base):
@@ -22,18 +22,20 @@ class Product(Base):
     name = Column(String)  # name of product
     url = Column(String, unique=True)  # url of product/key
     currentPrice = Column(String)  # current price of product
-    users = relationship("Product", secondary=lambda: usersproducts_table)
+    users = relationship("User", secondary=lambda: usersproducts_table)
     notifyPrice = Column(String)  # price at which a notification should be sent
+    image = Column(String)  # path to the image
 
-    def __init__(self, name, url, currentPrice, notifyPrice):
+    def __init__(self, name, url, currentPrice, notifyPrice, image):
         self.name = name
         self.url = url
         self.currentPrice = currentPrice
         self.notifyPrice = notifyPrice
+        self.image = image
 
     def __repr__(self):
-        return "<Product ('%s',%s', '%s','%s', '%s')>" % \
-            (self.user_id, self.name, self.url, self.currentPrice, self.notifyPrice)
+        return "<Product ('%s', '%s','%s', '%s', '%s')>" % \
+            (self.name, self.url, self.currentPrice, self.notifyPrice, self.image)
 
 
 class User(Base):

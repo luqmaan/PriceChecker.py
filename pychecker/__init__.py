@@ -9,7 +9,7 @@ from pychecker import database
 from pychecker import views
 
 # run this line when the models have changed
-# database.init()
+database.init()
 
 app.config['TRAP_BAD_REQUEST_ERRORS'] = True
 app.secret_key = secret_key

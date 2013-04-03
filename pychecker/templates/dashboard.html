@@ -7,7 +7,7 @@
 	</div>
 </div>{% endblock %}
 {% block body %}
-    {% if message is defined %}
+    {% if message is defined and message != None %}
 	<pre>{{ message }}</pre>
     {% endif %}
     {% if form is defined %}
