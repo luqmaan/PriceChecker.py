@@ -16,7 +16,6 @@ from flask.ext.login import logout_user
 from flask.ext.login import login_required
 from flask.ext.login import current_user
 
-
 def debug():
     'http://flask.pocoo.org/snippets/21/'
     assert app.debug is False
@@ -147,7 +146,7 @@ def product():
             return render_template('dashboard.html',
                                    message=message,
                                    products=products,
-                                   user=user,
+                                   user=current_user,
                                    form=form)
         else:
             return render_template('dashboard.html', form=form)
@@ -160,6 +159,6 @@ def product_id(product_id):
     return 'product %s' % (product_id)
 
 
-@app.route('/user/<username>/')
-def user_username(username):
-    return 'user with name %s' % (username)
+@app.route('/user/')
+def user_route():
+    return "current_user.is_authenticated: " + str(current_user.is_authenticated()) + "\n" + str(vars(current_user))

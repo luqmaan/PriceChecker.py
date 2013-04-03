@@ -71,7 +71,7 @@ class User(Base):
 
     def is_authenticated(self):
         'http://flask.pocoo.org/mailinglist/archive/2011/11/27/flask-login-question/'
-        return db_session.query(User).get(self.username) is not None
+        return db_session.query(User).filter(User.username == self.username).count() > 0
 
     def is_anonymous(self):
         return False
