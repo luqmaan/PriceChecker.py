@@ -1,5 +1,6 @@
+import sqlalchemy
 from sqlalchemy import ForeignKey
-from sqlalchemy import Column, Date, Integer, String, Numeric
+from sqlalchemy import Column, Date, Integer, String, DateTime, Enum, Text, Numeric
 from sqlalchemy.orm import relationship, backref
 
 #Defaults to SHA256-Crypt under 32 bit systems, SHA512-Crypt under 64 bit systems.
@@ -11,26 +12,32 @@ from pychecker.database import Base
 
 
 class Product(Base):
-    __tablename__ = "products"
+	__tablename__ = "products"
 
-    id = Column(Integer)  # id, need to have even if null
-    name = Column(String)  # name of product
-    url = Column(String, primary_key=True)  # url of product/key
-    currentPrice = Column(String)  # current price of product
-    user_id = Column(Integer, ForeignKey('users.username'), primary_key=True)  # id of user following
-    notifyPrice = Column(String)  # price at which a notification should be sent
+	# I kind of think the product.id should be primary so it autoincrements
+	# or use sqlite rowid?
+	id = Column(Integer)  # id, need to have even if null
+	name = Column(String)  # name of product
+	url = Column(String, primary_key=True)  # url of product/key
+	currentPrice = Column(String)  # current price of product
+	user_id = Column(Integer, ForeignKey('users.username'), primary_key=True)  # id of user following
+	regex_id = Column(Integer, ForeignKey('regexes.id')) 
+	notifyPrice = Column(String)  # price at which a notification should be sent
+	history = relationship("ScrapeHistory", backref="ScrapeHistory", lazy="dynamic")
 
-    def __init__(self, user_id, name, url, currentPrice, notifyPrice):
-        self.user_id = user_id
-        self.name = name
-        self.url = url
-        self.currentPrice = currentPrice
-        self.notifyPrice = notifyPrice
+	def __init__(self, user_id, name, url, currentPrice, notifyPrice):
+		self.user_id = user_id
+		self.name = name
+		self.url = url
+		self.currentPrice = currentPrice
+		self.notifyPrice = notifyPrice
 
-    def __repr__(self):
-        return "<Product ('%s',%s', '%s','%s', '%s')>" % \
-            (self.user_id, self.name, self.url, self.currentPrice, self.notifyPrice)
+	def __repr__(self):
+        	return "<Product ('%s', '%s', '%s', '%s', '%s')>" % \
+		(self.user_id, self.name, self.url, self.currentPrice, self.notifyPrice)
 
+# UserSession
+# UserAuth type=password, nonce tokens
 
 class User(Base):
     __tablename__ = "users"
@@ -75,17 +82,45 @@ class User(Base):
     def get_id(self):
         return self.username
 
+class ScrapeHistory(Base):
+       __tablename__ = "ScrapeHistory"
+       id = Column(Integer, primary_key=True)
+       product_id = Column(Integer, ForeignKey('products.id'))
+       regex_id = Column(Integer, ForeignKey('regexes.id'))
+       created = Column(DateTime, default=sqlalchemy.func.now())
+       status = Column(Enum, Enum('Success', 'Failed'))
+       data = Column(String)
+
+       def __init__(self, id, regex_id, status, data):
+               self.product_id = id
+               self.regex_id = regex_id
+               self.data = data
+               self.status = status
 
 class RegEx(Base):
-    __tablename__ = "regexes"
-    id = Column(Integer, primary_key=True)  # id/key
-    siteurl = Column(String)  # url of site, maybe make associated with product urls?
-    regex = Column(String)  # regex
+	__tablename__ = "regexes"
+	id = Column(Integer, primary_key=True)  # id/key
+	siteurl = Column(String)  # url of site, maybe make associated with product urls?
+	regex = Column(String)  # regex/xpath
+	type = Column(String, Enum('regex', 'xpath'))
+	meta = Column(String)
+	title = Column(String)
+	text = Column(String)
+	name = Column(String)
+	date_added = Column(DateTime, default=sqlalchemy.func.now())
+	history = relationship("ScrapeHistory", backref="RegexHistory", lazy="dynamic")
+	products = relationship("Product", backref="Product", lazy="dynamic")
 
-    def __init_(self, siteurl, regex):
-        self.siteurl = siteurl
-        self.regex = regex
+	def __init__(self, siteurl, regex, rorx, meta, title, text, name):
+		self.siteurl = siteurl
+		self.regex = regex
+		self.type = rorx
+		self.meta = meta
+		self.title = title
+		self.name = name
+		self.text = text
 
-    def __repr__(self):
-        return "<Regex ('%s', '%s'>" % (self.siteurl, self.regex)
+	def __repr__(self):
+		return "<Regex ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s'>" % (self.siteurl, self.regex, self.type, self.meta, self.title, self.name, self.date_added, self.text)
+
 

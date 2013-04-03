@@ -145,3 +145,6 @@ def user():
 @app.route('/user/<username>/')
 def user_username(username):
     return 'user with name %s' % (username)
+
+# load scraper views
+import scraper # or from scraper import * ?

@@ -2,4 +2,5 @@
 Thumbs.db
 .DS_Store
 *.pyc
+pychecker.db
 pychecker/config.py
