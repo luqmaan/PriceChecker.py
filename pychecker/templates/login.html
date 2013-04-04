@@ -1,11 +1,11 @@
 {% from "helpers.html" import render_field %}
 {% from "helpers.html" import render_page_title %}
-{% extends "layout.html" %}
+{% extends "template_simple.html" %}
 
 {% block title %}Login{% endblock %}
 {% block page_title %}{{ render_page_title("Login") }}{% endblock %}
 
-{% block body %}
+{% block content %}
     {% if error != None %}
     	{% for error in form.username.errors %}
     	    <li>{{ error }}</li>
@@ -13,11 +13,10 @@
     {% endif %}
     <div class="login">
       <form class="form-signin" method="POST" action="">
-        <h3 class="form-signin-heading">Welcome!</h2>
         {{ form.csrf_token }}
-        {{ render_field(form.username, "input-fill") }}
-        {{ render_field(form.password, "input-fill") }}
-        <button class="custom-btn btn btn-fill btn-teal" type="submit">Log In</button>
+        {{ render_field(form.username, "input-xxlarge") }}
+        {{ render_field(form.password, "input-xxlarge") }}
+        <button class="btn btn-xxlarge btn-teal" type="submit">Log In</button>
       </form>
     </div>
   </div>

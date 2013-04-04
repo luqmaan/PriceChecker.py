@@ -1,0 +1,18 @@
+{% extends "boilerplate.html" %}
+{% block body %}
+  <body class="simple">
+    <div class="navigation">
+        <div class="masthead container-fluid">
+            <a class="logo" href="/"><img src="{{ url_for('static', filename='img/logo.png') }}"></a>
+        </div>
+    </div>
+    {% block page_title %}{% endblock %}
+    <div class="content container-fluid container">
+        {% block content %}{% endblock %}
+    </div> <!-- /container -->
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="/static/js/jquery-1.9.1.js"></script>
+  </body>
+  {% endblock %}
