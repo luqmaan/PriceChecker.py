@@ -5,6 +5,9 @@ body {
   margin:0;
   background:#fefff6;
 }
+body.simple {
+  background: #00b58d;
+}
 /* masthead / navbar */
 .navigation {
   background:#00b58d;
@@ -95,16 +98,13 @@ pre {
 .sign-up {
   float:right;
 }
-.login {
-  margin-top:100px;
-}
 .lead {
   font-size:30px;
 }
 /* Login / Sign In form */
-.form-signin {
+.form-signin, .form-signup {
   color: #696969;
-  max-width:300px;
+/*  max-width:300px;
   padding:19px 29px 29px;
   margin:0 auto 20px;
   background-color:#fff;
@@ -114,11 +114,23 @@ pre {
   -webkit-box-shadow:0 1px 2px rgba(0,0,0,.05);
   -moz-box-shadow:0 1px 2px rgba(0,0,0,.05);
   box-shadow:0 1px 2px rgba(0,0,0,.05);
+*/
 }
-.form-signin input {
+.form-signup input, .form-signin input {
   font-size: 16px;
   padding: 5px 9px;
+}
+.form-signup input {
+  width: 200px;
+}
+.form-signin input, .form-signin .btn {
   width: 280px;
+  border-radius: 3px;
+  display: block;
+}
+.form-signin .btn {
+  width: 300px;
+  height: 60px;
 }
 /* Inputs */
 input.input-xxlarge, select.input-xxlarge {

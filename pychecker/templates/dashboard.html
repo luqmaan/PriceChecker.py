@@ -1,13 +1,13 @@
 {% from "helpers.html" import render_field %}
 {% from "helpers.html" import render_page_title %}
-{% extends "layout.html" %}
+{% extends "template_normal.html" %}
 {% block title %}{% if user is defined %}{{ user.username }}{% endif %}s{% endblock %}
 
 {% block page_title %}
 	{{ render_page_title("Dashboard") }}
 {% endblock %}
 
-{% block body %}
+{% block content %}
     {% if message is defined and message != None %}
 		<pre>{{ message }}</pre>
     {% endif %}
