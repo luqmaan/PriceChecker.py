@@ -39,13 +39,11 @@ def init():
     new_product0 = models.Product(name="Toothbrush",
                                   url="http://google.com",
                                   currentPrice="50",
-                                  notifyPrice="23",
                                   image="/static/img/screenshot.jpg")
 
     new_product1 = models.Product(name="Chocolate",
                                   url="http://amazon.com",
                                   currentPrice="77",
-                                  notifyPrice="11",
                                   image="/static/img/screenshot.jpg")
 
     new_product0.users.append(u0)

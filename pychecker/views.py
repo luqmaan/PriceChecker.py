@@ -131,7 +131,6 @@ def product():
             new_product = models.Product(name="ProductName",
                                          url=form.url.data,
                                          currentPrice="Test price",
-                                         notifyPrice=form.notify_price.data,
                                          image="/static/img/screenshot.jpg")
 
             new_product.users.append(current_user)

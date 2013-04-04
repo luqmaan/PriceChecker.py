@@ -24,19 +24,17 @@ class Product(Base):
     url = Column(String, unique=True)  # url of product/key
     currentPrice = Column(String)  # current price of product
     users = relationship("User", secondary=usersproducts_table)
-    notifyPrice = Column(String)  # price at which a notification should be sent
     image = Column(String)  # path to the image
 
-    def __init__(self, name, url, currentPrice, notifyPrice, image):
+    def __init__(self, name, url, currentPrice, image):
         self.name = name
         self.url = url
         self.currentPrice = currentPrice
-        self.notifyPrice = notifyPrice
         self.image = image
 
     def __repr__(self):
-        return "<Product ('%s', '%s','%s', '%s', '%s')>" % \
-            (self.name, self.url, self.currentPrice, self.notifyPrice, self.image)
+        return "<Product ('%s', '%s','%s', '%s')>" % \
+            (self.name, self.url, self.currentPrice, self.image)
 
 
 class User(Base):
