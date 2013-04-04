@@ -136,8 +136,6 @@ def product():
 
             new_product.users.append(current_user)
 
-            a = current_user
-
             try:
                 db_session.add(new_product)
                 db_session.commit()

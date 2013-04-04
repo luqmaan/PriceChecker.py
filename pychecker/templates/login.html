@@ -15,9 +15,9 @@
       <form class="form-signin" method="POST" action="">
         <h3 class="form-signin-heading">Welcome!</h2>
         {{ form.csrf_token }}
-        {{ render_field(form.username) }}
-        {{ render_field(form.password) }}
-        <button class="custom-btn btn btn-large btn-teal" type="submit">Log In</button>
+        {{ render_field(form.username, "input-fill") }}
+        {{ render_field(form.password, "input-fill") }}
+        <button class="custom-btn btn btn-fill btn-teal" type="submit">Log In</button>
       </form>
     </div>
   </div>

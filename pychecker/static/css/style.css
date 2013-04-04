@@ -53,6 +53,22 @@ body {
 .container > hr {
   margin:30px 0;
 }
+.content {
+  padding: 20px 0;
+}
+/* Typography */
+h2, h3, h4 {
+  color: #696969;
+}
+h2 {
+  font-size: 39px;
+  line-height: 50px;
+  margin: 15px 0;
+}
+/* message */
+pre {
+  background: #fbffbc;
+}
 /* Main marketing message and sign up button */
 .jumbotron {
   margin:60px 0;
@@ -85,7 +101,9 @@ body {
 .lead {
   font-size:30px;
 }
+/* Login / Sign In form */
 .form-signin {
+  color: #696969;
   max-width:300px;
   padding:19px 29px 29px;
   margin:0 auto 20px;
@@ -97,23 +115,33 @@ body {
   -moz-box-shadow:0 1px 2px rgba(0,0,0,.05);
   box-shadow:0 1px 2px rgba(0,0,0,.05);
 }
-.form-signin .form-signin-heading,.form-signin .checkbox,.custom-h2 {
-  margin-bottom:10px;
-  color:#696969;
-  text-decoration:none!important;
+.form-signin input {
+  font-size: 16px;
+  padding: 5px 9px;
+  width: 280px;
 }
-.form-signin input[type="text"],.form-signin input[type="password"] {
-  font-size:16px;
-  height:auto;
-  margin-bottom:15px;
-  padding:7px 9px;
-}
-input.add-product {
+/* Inputs */
+input.input-xxlarge, select.input-xxlarge {
   height:50px;
   font-size:30px;
-  width:78%;
-  -webkit-border-radius:.25em!important;
-  -moz-border-radius:.25em!important;
+  line-height: 34px;  
+}
+select.input-xxlarge {
+  height: 59px;
+}
+/* Buttons */
+.btn {
+  font-family: Raleway;
+  font-weight: 800;  
+  font-size: 21px;
+  padding: 10px 0;
+}
+.btn-fill {
+  width: 100%;
+}
+.btn-xxlarge {
+  font-size: 30px;
+  font-family: Raleway;
 }
 button.add-product,button.add-product:hover {
   height:60px;
@@ -121,16 +149,8 @@ button.add-product,button.add-product:hover {
   margin-right:0!important;
   width:16%;
 }
-.btn {
-  font-family: Raleway;
-  font-weight: 800;  
-}
-.btn-large {
-  font-size: 30px;
-  font-family: Raleway;
-}
+/* button generator:  http://charliepark.org/bootstrap_buttons/ */
 .btn-pink {
-  /* button generator:  http://charliepark.org/bootstrap_buttons/ */
   background-color: hsl(333, 82%, 57%) !important;
   background-repeat: repeat-x;
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#f281b4", endColorstr="#eb3788");

@@ -1,6 +1,18 @@
 PyChecker
 ==
 
+Design
+--
+
+[Color scheme](http://www.colourlovers.com/palette/2785786/Stronger)
+
+Fonts are:
+
+- [Raleway](http://www.google.com/fonts/specimen/Raleway)
+- [Wisdom Script](http://www.losttype.com/font/?name=wisdom%20script)
+- Arial
+
+
 Database
 --
 

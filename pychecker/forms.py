@@ -1,4 +1,4 @@
-from flask.ext.wtf import Form, TextField, PasswordField, validators
+from flask.ext.wtf import Form, TextField, PasswordField, validators, SelectField
 from pychecker.models import User
 from pychecker.scraper import valid_product
 from pychecker.database import db_session
@@ -6,8 +6,12 @@ from pychecker import models
 
 
 class LoginForm(Form):
-    username = TextField('username', [validators.Required()])
-    password = PasswordField('password', [validators.Required()])
+    username = TextField(label='username',
+                         validators=[validators.Required()],
+                         description='Username')
+    password = PasswordField(label='password',
+                             validators=[validators.Required()],
+                             description='Password')
 
     def __init__(self, *args, **kwargs):
         Form.__init__(self, *args, **kwargs)
@@ -18,7 +22,8 @@ class LoginForm(Form):
         if not rv:
             return False
 
-        user = db_session.query(models.User).filter(models.User.username == self.username.data).first()
+        user = db_session.query(models.User).filter(
+            models.User.username == self.username.data).first()
 
         if user is None:
             self.username.errors.append('Unknown username')
@@ -33,8 +38,17 @@ class LoginForm(Form):
 
 
 class ProductForm(Form):
-    url = TextField('URL', [validators.Required()])
-    notify_price = TextField('Price to Notify', [validators.Required()])
+    url = TextField(label='url',
+                    validators=[validators.Required()],
+                    description="URL To Product")
+    notify_price = TextField(label='Price to Notify',
+                             validators=[validators.Required()],
+                             description="$")
+    brand = SelectField('Brand', choices=[
+        ('amz', 'Amazon'), ('new', 'Newegg'), ('gap', 'GAP'),
+        ('old', 'Old Navy'), ('urb', 'Urban Outfitters'),
+        ('mac', 'Macy\'s'), ('stm', 'Steam')
+    ])
 
     def __init__(self, *args, **kwargs):
         Form.__init__(self, *args, **kwargs)

@@ -1,6 +1,18 @@
 {# http://flask.pocoo.org/docs/patterns/wtforms/#forms-in-templates #}
-{% macro render_field(field) %}
-  <input type="text" placeholder="{{ field.name }}" name="{{ field.name }}" />
+{% macro render_field(field, class="") %}
+  {% if field.type == "TextField" %}
+      <input type="text" placeholder="{{ field.description }}" name="{{ field.name }}" class="{{ class }}" />
+    {% elif field.type == "PasswordField" %}
+      <input id="{{ field.name }}" name="{{ field.name }}" type="password" value=""  class="{{ class }}" placeholder="Password" />
+    {% elif field.type == "SelectField" %}
+      <select id="{{ field.name }}" name="{{ field.name }}" class="{{ class }}">
+        {% for c in field.choices %}
+          <option value="{{ c[0] }}">{{ c[1] }}</option>  
+        {% endfor %}
+      </select>
+    {% else %}
+      <span class="{{ class }}">{{ field }}</span>
+  {% endif %}
   {% if field.errors %}
     <ul class=errors>
     {% for error in field.errors %}
