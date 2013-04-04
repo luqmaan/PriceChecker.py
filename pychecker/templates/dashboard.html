@@ -25,52 +25,17 @@
     <h2 class="">Your Products</h2>
     <ul class="products">
 	{% for product in products %}
-		<li class="product">{{ product }}</li>
+		<li class="product">
+			<div class="product-box">
+			<div>
+				 <p class="product-name">
+				 	<a href="{{ product.url }}" target="_blank">{{ product.name }}</a>
+				 </p>
+				<img src="../{{ product.image }}">
+				<p class="product-price"> ${{ product.currentPrice }}</p>
+				</div>
+			</div>
+		</li>
 	{% endfor %}
-	<li class="product">
-		<div class="product-box">
-			<div>
-				 <p class="product-name">Wood Wood Kellog Tee</p>
-				<img src="../static/img/screenshot.jpg">
-				<p class="product-price"> $110</p>
-				</div>
-			</div>
-		</li>
-	<li class="product">
-	<div class="product-box">
-			<div>
-				<p class="product-name">Wood Wood Kellog Tee</p>
-				<img src="../static/img/screenshot.jpg">
-				<p class="product-price"> $110</p>
-				</div>
-			</div>
-		</li>
-	<li class="product">
-	<div class="product-box">
-			<div>
-				<p class="product-name">Wood Wood Kellog Tee</p>
-				<img src="../static/img/screenshot.jpg">
-				<p class="product-price"> $110</p>
-				</div>
-			</div>
-		</li>
-	<li class="product">
-	<div class="product-box">
-			<div>
-				<p class="product-name">Wood Wood Kellog Tee</p>
-				<img src="../static/img/screenshot.jpg">
-				<p class="product-price"> $110</p>
-				</div>
-			</div>
-		</li>
-	<li class="product">
-	<div class="product-box">
-			<div>
-				<p class="product-name">Wood Wood Kellog Tee</p>
-				<img src="../static/img/screenshot.jpg">
-				<p class="product-price"> $110</p>
-				</div>
-			</div>
-		</li>
 </ul>
 {% endblock %}

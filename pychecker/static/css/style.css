@@ -284,4 +284,11 @@ button.add-product,button.add-product:hover {
   font-size:10pt;
   border-bottom:1px solid #ccc;
   font-weight:700;
+  color: #000000;
+  text-decoration: none;
+}
+
+.product-name a {
+  color: #000000;
+  text-decoration: none;
 }
