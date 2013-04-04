@@ -1,0 +1,19 @@
+{# http://flask.pocoo.org/docs/patterns/wtforms/#forms-in-templates #}
+{% macro render_field(field) %}
+  <input type="text" placeholder="{{ field.name }}" name="{{ field.name }}" />
+  {% if field.errors %}
+    <ul class=errors>
+    {% for error in field.errors %}
+      <li>{{ error }}</li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+{% endmacro %}
+
+{% macro render_page_title(title) %}
+    <div class="title-header">
+        <div class="container-fluid container">
+            <h1>{{ title }}</h1>
+        </div>
+    </div>
+{% endmacro %}

@@ -21,11 +21,12 @@
     <link rel="apple-touch-icon-precomposed" sizes="72x72" href="{{ url_for('static', filename='ico/apple-touch-icon-72-precomposed.png') }}">
     <link rel="apple-touch-icon-precomposed" href="{{ url_for('static', filename='ico/apple-touch-icon-57-precomposed.png') }}">
     <link rel="shortcut icon" href="{{ url_for('static', filename='ico/favicon.png') }}">
+
   </head>
 
   <body>
-    <div class="header-custom">
-        <div class="masthead">
+    <div class="navigation">
+        <div class="masthead container-fluid">
             <ul class="nav nav-pills pull-right">
               {% if user is defined and user.is_authenticated() %}
                 <li><a href="/user">{{ user.username }}</a></li>
@@ -34,14 +35,12 @@
                 <li><a href="/login">Login</a></li>
               {% endif %}
             </ul>
-            <h3 class="pricepy-heading"><a href="/">Pychecker</a></h3>
+            <a class="logo" href="/"><img src="{{ url_for('static', filename='img/logo.png') }}"></a>
         </div>
     </div>
-    {% block pagetitle %}{% endblock %}
-    <div class="container-narrow custom-body">
-      
-
-    {% block body %}{% endblock %}
+    {% block page_title %}{% endblock %}
+    <div class="content container-fluid container">
+        {% block body %}{% endblock %}
     </div> <!-- /container -->
     <!-- Le javascript
     ================================================== -->

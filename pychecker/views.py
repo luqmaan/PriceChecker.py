@@ -86,6 +86,8 @@ def login():
     error = None
     form = forms.LoginForm()
     if request.method == 'GET':
+        import pdb
+        # pdb.set_trace()
         return render_template('login.html', form=form, error=error)
     elif request.method == 'POST':
         if form.validate():

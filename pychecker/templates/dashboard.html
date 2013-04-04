@@ -1,27 +1,28 @@
-{% from "_formhelpers.html" import render_field %}
+{% from "helpers.html" import render_field %}
+{% from "helpers.html" import render_page_title %}
 {% extends "layout.html" %}
 {% block title %}{% if user is defined %}{{ user.username }}{% endif %}s{% endblock %}
-{% block pagetitle %} <div class="title-header">
-	<div class="container-narrow">
-		<h1>Dashboard</h1>
-	</div>
-</div>{% endblock %}
+
+{% block page_title %}
+	{{ render_page_title("Dashboard") }}
+{% endblock %}
+
 {% block body %}
     {% if message is defined and message != None %}
-	<pre>{{ message }}</pre>
+		<pre>{{ message }}</pre>
     {% endif %}
     {% if form is defined %}
-	<h2 class="custom-h2">Add a Product</h2>
-	<form class="form-search" style="align:center"  method="POST" action="/product/">
-		<input type="text" class="add-product search-query">
-           <button type="submit" class="custom-btn add-product">Submit</button>
-    <div style="">
-	<form>
-	    {{ form.csrf_token }}
-	    {{ render_field(form.url) }}
-	    {{ render_field(form.notify_price) }}
-	    <input type="submit" value="Go">
-	</form></div>
+		<h2 class="custom-h2">Add a Product</h2>
+		<form class="form-search" style="align:center"  method="POST" action="/product/">
+			<input type="text" class="add-product search-query">
+	           <button type="submit" class="btn btn-large btn-orange add-product">Add</button>
+	    <div style="">
+		<form>
+		    {{ form.csrf_token }}
+		    {{ render_field(form.url) }}
+		    {{ render_field(form.notify_price) }}
+		    <input type="submit" value="Go">
+		</form></div>
     {% endif %}
    	<hr>
     <h2 class="custom-h2">Your Products</h2>
