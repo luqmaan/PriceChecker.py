@@ -2,48 +2,48 @@ import sqlalchemy
 from sqlalchemy import ForeignKey
 from sqlalchemy import Column, Date, Integer, String, DateTime, Enum, Text, Numeric
 from sqlalchemy.orm import relationship, backref
+from sqlalchemy.schema import Table
 
-#Defaults to SHA256-Crypt under 32 bit systems, SHA512-Crypt under 64 bit systems.
+# Defaults to SHA256-Crypt under 32 bit systems, SHA512-Crypt under 64 bit systems.
 from passlib.apps import custom_app_context as pwd_context
 
 from pychecker import db_session
 from pychecker.database import engine
 from pychecker.database import Base
 
+# http://docs.sqlalchemy.org/en/latest/orm/relationships.html#many-to-many
+usersproducts_table = Table('userproducts', Base.metadata,
+                            Column('username', Integer, ForeignKey('users.username')),
+                            Column('url', Integer, ForeignKey('products.url')),
+                            Column('userproduct_id', Integer, primary_key=True, nullable=False))
+# XXX link userproducts to regex_id so each user can choose which block on page to monitor?
 
 class Product(Base):
 	__tablename__ = "products"
 
-	# I kind of think the product.id should be primary so it autoincrements
-	# or use sqlite rowid?
-	id = Column(Integer)  # id, need to have even if null
+	id = Column(Integer, primary_key=True, nullable=False)  # id, need to have even if null
 	name = Column(String)  # name of product
-	url = Column(String, primary_key=True)  # url of product/key
+	url = Column(String, unique=True)  # url of product/key
 	currentPrice = Column(String)  # current price of product
-	user_id = Column(Integer, ForeignKey('users.username'), primary_key=True)  # id of user following
-	regex_id = Column(Integer, ForeignKey('regexes.id')) 
-	notifyPrice = Column(String)  # price at which a notification should be sent
+	users = relationship("User", secondary=usersproducts_table)
+	image = Column(String)  # path to the image
 	history = relationship("ScrapeHistory", backref="ScrapeHistory", lazy="dynamic")
 
-	def __init__(self, user_id, name, url, currentPrice, notifyPrice):
-		self.user_id = user_id
+	def __init__(self, name, url, currentPrice, image):
 		self.name = name
 		self.url = url
 		self.currentPrice = currentPrice
-		self.notifyPrice = notifyPrice
+		self.image = image
 
 	def __repr__(self):
-        	return "<Product ('%s', '%s', '%s', '%s', '%s')>" % \
-		(self.user_id, self.name, self.url, self.currentPrice, self.notifyPrice)
-
-# UserSession
-# UserAuth type=password, nonce tokens
+		return "<Product ('%s', '%s','%s', '%s')>" % \
+		(self.name, self.url, self.currentPrice, self.image)
 
 class User(Base):
     __tablename__ = "users"
 
-    id = Column(Integer)  # id, need to have even if null...
-    username = Column(String, primary_key=True)  # username/key
+    id = Column(Integer, primary_key=True, nullable=False)  # id, need to have even if null...
+    username = Column(String, unique=True)  # username/key
     password = Column(String)  # password
     email = Column(String)  # user's email
     phone = Column(String)  # user's phone number
@@ -51,12 +51,11 @@ class User(Base):
     # accessTokens = Column() #dunnno what these are
 
     # list of products user is following, can also get user data by calling product.user
-    following = relationship("Product", order_by='Product.id', backref="user")
-
+    products = relationship("Product", secondary=usersproducts_table)
 
     def __init__(self, username, password, email, phone, twitter):
         self.username = username
-        self.password = pwd_context.encrypt(password); # encrypts password
+        self.password = pwd_context.encrypt(password) # encrypts password
         self.email = email
         self.phone = phone
         self.twitter = twitter
@@ -74,13 +73,29 @@ class User(Base):
 
     def is_authenticated(self):
         'http://flask.pocoo.org/mailinglist/archive/2011/11/27/flask-login-question/'
-        return db_session.query(User).get(self.username) is not None
+        return db_session.query(User).filter(User.username == self.username).count() > 0
 
     def is_anonymous(self):
         return False
 
     def get_id(self):
         return self.username
+
+class RegEx(Base):
+	__tablename__ = "regexes"
+	id = Column(Integer, primary_key=True)  # id/key
+	siteurl = Column(String)  # url of site, maybe make associated with product urls?
+	regex = Column(String)  # regex/xpath
+	date_added = Column(DateTime, default=sqlalchemy.func.now())
+	history = relationship("ScrapeHistory", backref="RegexHistory", lazy="dynamic")
+	# XXX save regex "name" like name/price so that we can know what kind of data it is getting?
+
+	def __init__(self, siteurl, regex):
+		self.siteurl = siteurl
+		self.regex = regex
+
+	def __repr__(self):
+		return "<Regex ('%s', '%s'>" % (self.siteurl, self.regex)
 
 class ScrapeHistory(Base):
        __tablename__ = "ScrapeHistory"
@@ -97,30 +112,6 @@ class ScrapeHistory(Base):
                self.data = data
                self.status = status
 
-class RegEx(Base):
-	__tablename__ = "regexes"
-	id = Column(Integer, primary_key=True)  # id/key
-	siteurl = Column(String)  # url of site, maybe make associated with product urls?
-	regex = Column(String)  # regex/xpath
-	type = Column(String, Enum('regex', 'xpath'))
-	meta = Column(String)
-	title = Column(String)
-	text = Column(String)
-	name = Column(String)
-	date_added = Column(DateTime, default=sqlalchemy.func.now())
-	history = relationship("ScrapeHistory", backref="RegexHistory", lazy="dynamic")
-	products = relationship("Product", backref="Product", lazy="dynamic")
-
-	def __init__(self, siteurl, regex, rorx, meta, title, text, name):
-		self.siteurl = siteurl
-		self.regex = regex
-		self.type = rorx
-		self.meta = meta
-		self.title = title
-		self.name = name
-		self.text = text
-
-	def __repr__(self):
-		return "<Regex ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s'>" % (self.siteurl, self.regex, self.type, self.meta, self.title, self.name, self.date_added, self.text)
-
+       def __repr__(self):
+		return "<ScrapeHistory ('%s', '%s', '%s', '%s'>" % (self.product_id, self.regex_id, self.created, self.status)
 

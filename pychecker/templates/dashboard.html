@@ -1,77 +1,41 @@
-{% from "_formhelpers.html" import render_field %}
-{% extends "layout.html" %}
+{% from "helpers.html" import render_field %}
+{% from "helpers.html" import render_page_title %}
+{% extends "template_normal.html" %}
 {% block title %}{% if user is defined %}{{ user.username }}{% endif %}s{% endblock %}
-{% block pagetitle %} <div class="title-header">
-	<div class="container-narrow">
-		<h1>Dashboard</h1>
-	</div>
-</div>{% endblock %}
-{% block body %}
-    {% if message is defined %}
-	<pre>{{ message }}</pre>
+
+{% block page_title %}
+	{{ render_page_title("Dashboard") }}
+{% endblock %}
+
+{% block content %}
+    {% if message is defined and message != None %}
+		<pre>{{ message }}</pre>
     {% endif %}
     {% if form is defined %}
-	<h2 class="custom-h2">Add a Product</h2>
-	<form class="form-search" style="align:center">           <input type="text" class="add-product search-query">
-           <button type="submit" class="custom-btn add-product">Submit</button>
-    <div style="">
-	<form method="POST" action="/product/">
-	    {{ form.csrf_token }}
-	    {{ render_field(form.url) }}
-	    {{ render_field(form.notify_price) }}
-	    <input type="submit" value="Go">
-	</form></div>
+		<h2 class="">Add a Product</h2>
+		<form class="form-search" style="align:center"  method="POST" action="/product/">
+		    {{ form.csrf_token }}
+		    {{ render_field(form.brand, "select-brand input-xxlarge span2") }}
+		    {{ render_field(form.url, "input-url input-xxlarge span4") }}
+		    {{ render_field(form.notify_price, "input-price input-xxlarge span1") }}
+            <button type="submit" class="btn btn-xxlarge btn-teal add-product">Add</button>
+		</form>
     {% endif %}
    	<hr>
-    <h2 class="custom-h2">Your Products</h2>
+    <h2 class="">Your Products</h2>
     <ul class="products">
 	{% for product in products %}
-	<li class="product">{{ product }}</li>
+		<li class="product">
+			<div class="product-box">
+			<div>
+				 <p class="product-name">
+				 	<a href="{{ product.url }}" target="_blank">{{ product.name }}</a>
+				 </p>
+				<img src="../{{ product.image }}">
+				<p class="product-price"> ${{ product.currentPrice }}</p>
+				</div>
+			</div>
+		</li>
 	{% endfor %}
-	<li class="product">
-		<div class="product-box">
-			<div>
-				 <p class="product-name">Wood Wood Kellog Tee</p>
-				<img src="../static/img/screenshot.jpg">
-				<p class="product-price"> $110</p>
-				</div>
-			</div>
-		</li>
-	<li class="product">
-	<div class="product-box">
-			<div>
-				<p class="product-name">Wood Wood Kellog Tee</p>
-				<img src="../static/img/screenshot.jpg">
-				<p class="product-price"> $110</p>
-				</div>
-			</div>
-		</li>
-	<li class="product">
-	<div class="product-box">
-			<div>
-				<p class="product-name">Wood Wood Kellog Tee</p>
-				<img src="../static/img/screenshot.jpg">
-				<p class="product-price"> $110</p>
-				</div>
-			</div>
-		</li>
-	<li class="product">
-	<div class="product-box">
-			<div>
-				<p class="product-name">Wood Wood Kellog Tee</p>
-				<img src="../static/img/screenshot.jpg">
-				<p class="product-price"> $110</p>
-				</div>
-			</div>
-		</li>
-	<li class="product">
-	<div class="product-box">
-			<div>
-				<p class="product-name">Wood Wood Kellog Tee</p>
-				<img src="../static/img/screenshot.jpg">
-				<p class="product-price"> $110</p>
-				</div>
-			</div>
-		</li>
 </ul>
 {% endblock %}

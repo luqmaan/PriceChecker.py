@@ -1,16 +1,23 @@
-{% from "_formhelpers.html" import render_field %}
-{% extends "layout.html" %}
+{% from "helpers.html" import render_field %}
+{% from "helpers.html" import render_page_title %}
+{% extends "template_simple.html" %}
+
 {% block title %}Login{% endblock %}
-{% block body %}
+{% block page_title %}{{ render_page_title("Login") }}{% endblock %}
+
+{% block content %}
     {% if error != None %}
-	{% for error in form.username.errors %}
-	    <li>{{ error }}</li>
-	{% endfor %}
+    	{% for error in form.username.errors %}
+    	    <li>{{ error }}</li>
+    	{% endfor %}
     {% endif %}
-    <form method="POST" action="">
+    <div class="login">
+      <form class="form-signin" method="POST" action="">
         {{ form.csrf_token }}
-	{{ render_field(form.username) }}
-	{{ render_field(form.password) }}
-        <input type="submit" value="Go">
-    </form>
+        {{ render_field(form.username, "input-xxlarge") }}
+        {{ render_field(form.password, "input-xxlarge") }}
+        <button class="btn btn-xxlarge btn-teal" type="submit">Log In</button>
+      </form>
+    </div>
+  </div>
 {% endblock %}

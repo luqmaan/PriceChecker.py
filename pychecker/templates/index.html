@@ -1,22 +1,24 @@
-{% extends "layout.html" %}
-{% block body %}
+{% extends "template_normal.html" %}
+{% block content %}
 
   <hr style="display:none">
 
   <div class="jumbotron">
-    <div class="index-header">
-    <h1>Be first to know<br>when it's on sale.</h1>
-    <p class="lead"> </p>
-    <a class="custom-btn" style="" href="/login">Login</a>
-  </div>
-  <div class="sign-up">
-            <form class="form-signin">
+    
+    <div class="span5">
+      <h1>Be first to know<br>when it's on sale.</h1>
+      <p class="lead"> </p>
+    </div>
+
+    <div class="sign-up span3">
+      <form class="form-signup">
         <h3 class="form-signin-heading">Sign up free!</h2>
-        <input type="text" class="input-block-level" placeholder="Email address">
-        <input type="password" class="input-block-level" placeholder="Password">
-        <button class="custom-btn" style="width: 220px;" type="submit">Start Tracking</button>
+        <input type="text" class="" placeholder="Email address">
+        <input type="password" class="" placeholder="Password">
+        <button class="btn btn-teal custom-btn" style="width: 220px;" type="submit">Start Tracking</button>
       </form>
-        </div>
+    </div>
+
   </div>
 
 {% endblock %}
