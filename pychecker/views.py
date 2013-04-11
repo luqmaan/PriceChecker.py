@@ -210,7 +210,7 @@ def init():
     # setup base regexes
     r = models.RegEx(
         "http://www.amazon.com/gp/product/B0083PWAPW/ref=kin_dev_gw_dual_t?ie=UTF8&nav_sdd=aps&pf_rd_m=ATVPDKIKX0DER&pf_rd_s=center-1&pf_rd_r=0AB6YEC5AMG4J1801183&pf_rd_t=101&pf_rd_p=1493999442&pf_rd_i=507846",
-        "B.priceLarge")
+        "TABLE.product > TBODY > TR > TD > B.priceLarge")
     add_to_db(r, title="Adding amazon regex")
 
     r = models.RegEx(
@@ -243,12 +243,12 @@ def init():
 
     new_product0 = models.Product(name="Python Programming",
                                   url=url1,
-                                  currentPrice=price1,
+                                  currentPrice="93.32",
                                   image=img1)
 
     new_product1 = models.Product(name="Squirrel Underpants",
                                   url=url2,
-                                  currentPrice=price2,
+                                  currentPrice="127.32",
                                   image=img2)
 
     new_product0.users.append(u0)
