@@ -41,9 +41,6 @@ class ProductForm(Form):
     url = TextField(label='url',
                     validators=[validators.Required()],
                     description="URL To Product")
-    notify_price = TextField(label='Price to Notify',
-                             validators=[validators.Required()],
-                             description="$")
     brand = SelectField('Brand', choices=[
         ('amz', 'Amazon'), ('new', 'Newegg'), ('gap', 'GAP'),
         ('old', 'Old Navy'), ('urb', 'Urban Outfitters'),
@@ -59,7 +56,7 @@ class ProductForm(Form):
         if not rv:
             return False
 
-        if not valid_product(self.url):
+        if not valid_product(self.url.data):
             return False
 
         return True

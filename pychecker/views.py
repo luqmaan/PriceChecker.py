@@ -1,7 +1,7 @@
 from pychecker import app
 from pychecker.database import db_session
 from pychecker import models
-from pychecker import LoginManager
+from pychecker import login_manager
 from pychecker import forms
 from flask import render_template
 from flask import request
@@ -15,6 +15,8 @@ from flask.ext.login import login_user
 from flask.ext.login import logout_user
 from flask.ext.login import login_required
 from flask.ext.login import current_user
+
+from pychecker.scraper import update
 
 
 def debug():
@@ -107,8 +109,11 @@ def logout():
     return redirect(request.args.get("next") or url_for("index"))
 
 
+@login_required
 @app.route('/dashboard/')
 def dashboard(message=None, form=None):
+    if not current_user.is_authenticated():
+        return login_manager.unauthorized()
     if form is None:
         form = forms.ProductForm()
     products = current_user.products
@@ -128,26 +133,33 @@ def product():
         return redirect(request.args.get("next") or url_for("dashboard"))
     if request.method == 'POST':
         if form.validate():
-            new_product = models.Product(name="ProductName",
-                                         url=form.url.data,
-                                         currentPrice="Test price",
-                                         image="/static/img/screenshot.jpg")
-
-            new_product.users.append(current_user)
-
+            # get product data from le scraper
             try:
-                db_session.add(new_product)
-                db_session.commit()
-            except (IntegrityError) as e:
-                message = "A product with this URL already exists: " + request.form['url'] + "\n\n" + str(e)
-                db_session.rollback()
-            except (InvalidRequestError, Exception) as e:
-                message = "Sorry, there was an error." + str(e)
-                db_session.rollback()
+                price, img = update(form.url.data)
+            except Exception as e:
+                return dashboard(form=form, message=str(e))
             else:
-                message = "Your product has been succesfully added."
+                new_product = models.Product(name="ProductName",
+                                             url=form.url.data,
+                                             currentPrice=price,
+                                             image=img)
 
-            return dashboard(message=message, form=form)
+                new_product.users.append(current_user)
+
+                try:
+                    db_session.add(new_product)
+                    db_session.commit()
+                except (IntegrityError) as e:
+                    # XXX maybe add the current_user to users and continue?
+                    message = "A product with this URL already exists: " + request.form['url'] + "\n\n" + str(e)
+                    db_session.rollback()
+                except (InvalidRequestError, Exception) as e:
+                    message = "Sorry, there was an error." + str(e)
+                    db_session.rollback()
+                else:
+                    message = "Your product has been succesfully added."
+
+                return dashboard(message=message, form=form)
 
         else:
             return render_template('dashboard.html', form=form)

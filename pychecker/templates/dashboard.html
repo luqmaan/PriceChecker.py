@@ -16,8 +16,7 @@
 		<form class="form-search" style="align:center"  method="POST" action="/product/">
 		    {{ form.csrf_token }}
 		    {{ render_field(form.brand, "select-brand input-xxlarge span2") }}
-		    {{ render_field(form.url, "input-url input-xxlarge span4") }}
-		    {{ render_field(form.notify_price, "input-price input-xxlarge span1") }}
+		    {{ render_field(form.url, "input-url input-xxlarge span5") }}
             <button type="submit" class="btn btn-xxlarge btn-teal add-product">Add</button>
 		</form>
     {% endif %}
