@@ -16,13 +16,15 @@ from flask.ext.login import logout_user
 from flask.ext.login import login_required
 from flask.ext.login import current_user
 from clint.textui import colored
+from twilio import twiml
 
 from pychecker.scraper import update
 
 
+@app.route('/debug')
 def debug():
     'http://flask.pocoo.org/snippets/21/'
-    assert app.debug is False
+    raise
 
 
 @app.route('/', methods=['POST', 'GET'])
@@ -36,42 +38,48 @@ def index():
 @app.route('/register/', methods=['POST', 'GET'])
 def register():
     error = None
-    db_users = db_session.query(models.User).all()
+    form = forms.RegisterForm()
     if request.method == 'POST':
         already_exists = db_session.query(models.User).filter(
-            models.User.username == request.form['username'])
+            models.User.username == form.username.data)
         if (already_exists.count() > 0):
-            error = "Sorry, the username " + request.form['username'] + \
+            error = "Sorry, the username " + str(form.username.data) + \
                     " is already taken. \n"
+            return render_template('register.html',
+                                   error=error,
+                                   user=current_user,
+                                   form=form)
         else:
-            u = models.User(request.form['username'],
-                            request.form['password'],
-                            request.form['email'],
-                            request.form['phone'],
-                            request.form['twitter'])
+            u = models.User(username=form.username.data,
+                            password=form.password.data,
+                            email=form.email.data,
+                            phone=form.phone.data,
+                            twitter=form.twitter.data)
             db_session.add(u)
             try:
                 db_session.commit()
             except (IntegrityError, SQLAlchemyError, Exception) as e:
-                error = "Sorry, the username " + request.form['username'] + \
+                error = "Sorry, the username " + str(form.username.data) + \
                         " is already taken. \n" + str(e)
                 db_session.rollback()
-            db_users = db_session.query(models.User).all()
-        return render_template('register.html',
-                               error=error,
-                               user=current_user,
-                               users=db_users)
+                return render_template('register.html',
+                                       error=error,
+                                       user=current_user,
+                                       form=form)
+            else:
+                return render_template("debug.html", message="You have been succcesfully registered.")
+
     elif request.method == 'GET':
         return render_template('register.html',
                                error=error,
                                user=current_user,
-                               users=db_users)
+                               form=form)
     else:
         error = "An unknown error has occurred."
         return render_template('register.html',
                                error=error,
                                user=current_user,
-                               users=db_users)
+                               form=form)
 
 
 @app.route('/users/')
@@ -89,13 +97,9 @@ def login():
     error = None
     form = forms.LoginForm()
     if request.method == 'GET':
-        import pdb
-        # pdb.set_trace()
         return render_template('login.html', form=form, error=error)
     elif request.method == 'POST':
         if form.validate():
-            # import pdb
-            # pdb.set_trace()
             login_user(form.user)
             return redirect(request.args.get("next") or url_for("dashboard"))
         else:
@@ -196,12 +200,12 @@ def init():
     u0 = models.User('john',
                      'doe',
                      'johndoe@yahoo.com',
-                     '8131234567',
+                     '13217507895',
                      '@jdoe')
     u1 = models.User('jane',
                      'doe',
                      'johndoe@yahoo.com',
-                     '8131234567',
+                     '18132155173',
                      '@jdoe')
 
     add_to_db(u0, "Adding user john")
@@ -210,7 +214,7 @@ def init():
     # setup base regexes
     r = models.RegEx(
         "http://www.amazon.com/gp/product/B0083PWAPW/ref=kin_dev_gw_dual_t?ie=UTF8&nav_sdd=aps&pf_rd_m=ATVPDKIKX0DER&pf_rd_s=center-1&pf_rd_r=0AB6YEC5AMG4J1801183&pf_rd_t=101&pf_rd_p=1493999442&pf_rd_i=507846",
-        "TABLE.product > TBODY > TR > TD > B.priceLarge")
+        "B.priceLarge")
     add_to_db(r, title="Adding amazon regex")
 
     r = models.RegEx(
@@ -234,7 +238,6 @@ def init():
 
     r = models.RegEx("http://store.steampowered.com/app/216174/", "div.game_purchase_price")
     add_to_db(r, title="Adding steam regex")
-
 
     url1 = "http://www.amazon.com/Programming-Python-Mark-Lutz/dp/0596158106/ref=sr_1_2?ie=UTF8&qid=1365687660&sr=8-2&keywords=python"
     url2 = "http://www.amazon.com/Accoutrements-11884-Squirrel-Underpants/dp/B004I03BCM/ref=sr_1_1?ie=UTF8&qid=1365687697&sr=8-1&keywords=squirrel+underpants"
@@ -263,7 +266,6 @@ def init():
     # new_product1.users.append(u0)
     add_to_db(title="Adding chocolate to john")
 
-
     # then, load the Alembic configuration and generate the
     # version table, "stamping" it with the most recent rev:
     from alembic.config import Config
@@ -285,3 +287,27 @@ def add_to_db(o=None, title=""):
         print colored.red("@Error: " + title + " -> " + str(error))
     else:
         print colored.green("@Success: " + title)
+
+
+@app.route("/call/<int:user_id>/<int:product_id>/<new_price>", methods=['GET', 'POST'])
+def call(user_id, product_id, new_price):
+    user = db_session.query(models.User).filter(models.User.id == user_id)
+    user = user.first()
+    product = db_session.query(models.Product).filter(models.Product.id == product_id)
+    product = product[0]
+    message = "Hello " + str(user.username) + " . The price of " + str(
+        product.name) + " has changed to " + str(new_price) + " dollars"
+    r = twiml.Response()
+    r.say(message, loop=5)
+    return str(r)
+
+
+@app.route("/highprices/")
+def highprices():
+    products = models.Product.query.all()
+    message = ""
+    p = products[1]
+    p.currentPrice = "329.32"
+    message += str(p)
+    db_session.commit()
+    return render_template("debug.html", message="Success\n" + str(message))

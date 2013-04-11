@@ -64,3 +64,36 @@ class ProductForm(Form):
             return False
 
         return True
+
+
+class RegisterForm(Form):
+    username = TextField(label='username',
+                         validators=[validators.Required()],
+                         description="Username")
+    password = TextField(label='password',
+                         validators=[validators.Required()],
+                         description="Password")
+    email = TextField(label='email',
+                      validators=[validators.Required()],
+                      description="Email Address")
+    phone = TextField(label='phone',
+                      validators=[validators.Required()],
+                      description="Phone Number")
+    twitter = TextField(label='twitter',
+                        validators=[validators.Required()],
+                        description="Twitter")
+
+    def __init__(self, *args, **kwargs):
+        Form.__init__(self, *args, **kwargs)
+        self.user = None
+
+    def validate(self):
+        rv = Form.validate(self)
+        if not rv:
+            return False
+
+        if not valid_product(self.url.data):
+            self.url.errors.append('Invalid URL')
+            return False
+
+        return True

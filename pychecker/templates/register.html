@@ -1,18 +1,17 @@
-{% extends "template_normal.html" %}
+{% from "helpers.html" import render_field %}
+{% from "helpers.html" import render_page_title %}
+{% extends "template_simple.html" %}
 {% block title %}Register{% endblock %}
 {% block content %}
     {% if error != None %}
         <pre>{{ error }}</pre>
     {% endif %}
     <form action="" method="POST">
-        <input type="text" value="username" name="username" />
-        <input type="text" value="password" name="password" />
-        <input type="text" value="email" name="email" />
-        <input type="text" value="phone" name="phone" />
-        <input type="text" value="twitter" name="twitter" />
-        <input type="submit" />
+        {{ render_field(form.username, "input-xxlarge span4") }}
+        {{ render_field(form.password, "input-xxlarge span4") }}
+        {{ render_field(form.email, "input-xxlarge span4") }}
+        {{ render_field(form.phone, "input-xxlarge span4") }}
+        {{ render_field(form.twitter, "input-xxlarge span4") }}
+        <input type="submit" class="btn btn-teal btn-xxlarge btn-fill" style="width: 100%" value="Register" />
     </form>
-    {% for user in users %}
-        <li>{{ user.username }} | {{ user.password }}</li>
-    {% endfor %}
 {% endblock %}
