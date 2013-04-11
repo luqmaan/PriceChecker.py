@@ -3,3 +3,4 @@ Thumbs.db
 .DS_Store
 *.pyc
 pychecker/config.py
+.vimrc

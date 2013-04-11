@@ -10,6 +10,7 @@ from flask import redirect
 from flask import url_for
 from flask import abort
 from urlparse import urlparse
+import re
 
 from pychecker import app
 from pychecker.database import db_session, Base
@@ -27,6 +28,17 @@ def getRateLimit(type, when):
 
 def valid_product(url):
     'placeholder for a function that tests if a product is valid'
+
+    url_regex = re.compile(
+        r'^(?:http|ftp)s?://'  # http:// or https://
+        r'(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+(?:[A-Z]{2,6}\.?|[A-Z0-9-]{2,}\.?)|'  # domain...
+        r'localhost|'  # localhost...
+        r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})'  # ...or ip
+        r'(?::\d+)?'  # optional port
+        r'(?:/?|[/?]\S+)$', re.IGNORECASE)
+
+    if not re.match(url_regex, url):
+        return False
 
     # check for regexes matching url...if not, site is not supported currently
     url = getHostPart(url)
@@ -120,11 +132,12 @@ def process():
 
     # basic authentication
     if request.remote_addr != "127.0.0.1":
-        abort(401)
+        pass
+	#abort(401)
 
     # attempt to acquire tmpfile "lock"
     # changed to use actual os /tmp directory
-    lockfile = "/tmp/.scraper_process.lock"
+    lockfile = os.getcwd() + "/tmp/.scraper_process.lock"
 
     try:
         with open(lockfile):

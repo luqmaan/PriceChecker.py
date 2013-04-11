@@ -107,7 +107,7 @@ class ScrapeHistory(Base):
     product_id = Column(Integer, ForeignKey('products.id'))
     regex_id = Column(Integer, ForeignKey('regexes.id'))
     created = Column(DateTime, default=sqlalchemy.func.now())
-    status = Column(Enum, Enum('Success', 'Failed'))
+    status = Column(String)
     data = Column(String)
 
     def __init__(self, id, regex_id, status, data):

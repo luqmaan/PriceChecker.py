@@ -1,0 +1,12 @@
+{% from "helpers.html" import render_field %}
+{% from "helpers.html" import render_page_title %}
+{% extends "template_simple.html" %}
+
+{% block title %}Debug{% endblock %}
+{% block page_title %}{{ render_page_title("Debug") }}{% endblock %}
+
+{% block content %}
+<pre>
+  {{ message }}
+</pre>
+{% endblock %}

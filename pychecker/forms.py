@@ -41,11 +41,14 @@ class ProductForm(Form):
     url = TextField(label='url',
                     validators=[validators.Required()],
                     description="URL To Product")
-    brand = SelectField('Brand', choices=[
-        ('amz', 'Amazon'), ('new', 'Newegg'), ('gap', 'GAP'),
-        ('old', 'Old Navy'), ('urb', 'Urban Outfitters'),
-        ('mac', 'Macy\'s'), ('stm', 'Steam')
-    ])
+    # brand = SelectField('Brand', choices=[
+    #     ('amz', 'Amazon'), ('new', 'Newegg'), ('gap', 'GAP'),
+    #     ('old', 'Old Navy'), ('urb', 'Urban Outfitters'),
+    #     ('mac', 'Macy\'s'), ('stm', 'Steam')
+    # ])
+    name = TextField(label='Product Name',
+                     validators=[validators.Required()],
+                     description="Name of Product")
 
     def __init__(self, *args, **kwargs):
         Form.__init__(self, *args, **kwargs)
@@ -57,6 +60,7 @@ class ProductForm(Form):
             return False
 
         if not valid_product(self.url.data):
+            self.url.errors.append('Invalid URL')
             return False
 
         return True

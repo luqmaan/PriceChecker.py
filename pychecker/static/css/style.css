@@ -157,9 +157,8 @@ select.input-xxlarge {
 }
 button.add-product,button.add-product:hover {
   height:60px;
-  margin-left:10px;
+  margin: 0;
   margin-right:0!important;
-  width:16%;
 }
 /* button generator:  http://charliepark.org/bootstrap_buttons/ */
 .btn-pink {
@@ -269,7 +268,6 @@ button.add-product,button.add-product:hover {
 .product-box {
   position:relative;
   clear:left;
-  background:#fff;
   -webkit-border-radius:3px;
   -moz-border-radius:3px;
   border-radius:3px;
@@ -283,21 +281,22 @@ button.add-product,button.add-product:hover {
 .product-price {
   font-size:16px;
   font-weight:700;
+  margin: 0;
   margin-top:10px;
   margin-right:5px;
-  line-height:auto!important;
+  line-height: auto !important;
   text-align:right;
   color:#696969;
 }
 
 .product-name {
+  margin: 0;
   margin:0 0 15px;
   text-align:left;
-  font-family:'Libre Baskerville';
-  font-size:10pt;
+  font-size:25px;
+  line-height: 27px;
   border-bottom:1px solid #ccc;
   font-weight:700;
-  color: #000000;
   text-decoration: none;
 }
 

@@ -15,23 +15,20 @@
 		<h2 class="">Add a Product</h2>
 		<form class="form-search" style="align:center"  method="POST" action="/product/">
 		    {{ form.csrf_token }}
-		    {{ render_field(form.brand, "select-brand input-xxlarge span2") }}
-		    {{ render_field(form.url, "input-url input-xxlarge span5") }}
-            <button type="submit" class="btn btn-xxlarge btn-teal add-product">Add</button>
+            {{ render_field(form.name, "input-xxlarge span8") }}
+		    {{ render_field(form.url, "input-url input-xxlarge span8") }}
+            <button type="submit" class="btn btn-xxlarge btn-teal add-product span8">Add</button>
 		</form>
     {% endif %}
    	<hr>
-    <h2 class="">Your Products</h2>
     <ul class="products">
 	{% for product in products %}
 		<li class="product">
 			<div class="product-box">
 			<div>
-				 <p class="product-name">
-				 	<a href="{{ product.url }}" target="_blank">{{ product.name }}</a>
-				 </p>
-				<img src="../{{ product.image }}">
-				<p class="product-price"> ${{ product.currentPrice }}</p>
+                <h3 class="product-name"> {{ product.name }}</h3>
+                <h3 class="product-price"> ${{ product.currentPrice }}</h3>
+				<a href="{{ product.url }}" target="_blankcss"> <img src="../{{ product.image }}"> </a>
 				</div>
 			</div>
 		</li>
