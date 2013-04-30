@@ -187,8 +187,8 @@ def user_route():
 def sites():
     message = ""
     if app.debug:
-        regexes = db_session.query(models.RegEx).all()
-        for r in regexes:
+        Selectores = db_session.query(models.Selector).all()
+        for r in Selectores:
             message += str(r) + "\n"
     return render_template("debug.html", message=message)
 
@@ -211,33 +211,33 @@ def init():
     add_to_db(u0, "Adding user john")
     add_to_db(u1, "Adding user jane")
 
-    # setup base regexes
-    r = models.RegEx(
+    # setup base Selectores
+    r = models.Selector(
         "http://www.amazon.com/gp/product/B0083PWAPW/ref=kin_dev_gw_dual_t?ie=UTF8&nav_sdd=aps&pf_rd_m=ATVPDKIKX0DER&pf_rd_s=center-1&pf_rd_r=0AB6YEC5AMG4J1801183&pf_rd_t=101&pf_rd_p=1493999442&pf_rd_i=507846",
         "B.priceLarge")
-    add_to_db(r, title="Adding amazon regex")
+    add_to_db(r, title="Adding amazon Selector")
 
-    r = models.RegEx(
+    r = models.Selector(
         "http://www.newegg.com/Product/Product.aspx?Item=N82E16827106352&cm_sp=DailyDeal-_-27-106-352-_-Homepage", "LI#singleFinalPrice > STRONG")
-    add_to_db(r, title="Adding newegg regex")
+    add_to_db(r, title="Adding newegg Selector")
 
-    r = models.RegEx("http://www.gap.com/browse/product.do?cid=94150&vid=1&pid=289760382", "SPAN#priceText")
-    add_to_db(r, title="Adding gap regex")
+    r = models.Selector("http://www.gap.com/browse/product.do?cid=94150&vid=1&pid=289760382", "SPAN#priceText")
+    add_to_db(r, title="Adding gap Selector")
 
-    r = models.RegEx("http://oldnavy.gap.com/browse/product.do?cid=93345&vid=1&pid=387523012", "SPAN#priceText")
-    add_to_db(r, title="Adding oldnavy regex")
+    r = models.Selector("http://oldnavy.gap.com/browse/product.do?cid=93345&vid=1&pid=387523012", "SPAN#priceText")
+    add_to_db(r, title="Adding oldnavy Selector")
 
-    r = models.RegEx("http://www.urbanoutfitters.com/urban/catalog/productdetail.jsp?id=26872101&parentid=M_NEWARRIVALS",
+    r = models.Selector("http://www.urbanoutfitters.com/urban/catalog/productdetail.jsp?id=26872101&parentid=M_NEWARRIVALS",
                      "DIV#content > DIV#productDetail > DIV#prodOptions > H2.price > SPAN")
-    add_to_db(r, title="Adding urbanoutfitters regex")
+    add_to_db(r, title="Adding urbanoutfitters Selector")
 
-    r = models.RegEx(
+    r = models.Selector(
         "http://www1.macys.com/shop/product/cuisinart-chw-12-coffee-maker-12-cup-programmable-with-hot-water-system?ID=466900&CategoryID=37460#fn=sp%3D1%26spc%3D189%26ruleId%3D18%26slotId%3Drec(3)",
         "DIV.standardProdPricingGroup > SPAN")
-    add_to_db(r, title="Adding macys regex")
+    add_to_db(r, title="Adding macys Selector")
 
-    r = models.RegEx("http://store.steampowered.com/app/216174/", "div.game_purchase_price")
-    add_to_db(r, title="Adding steam regex")
+    r = models.Selector("http://store.steampowered.com/app/216174/", "div.game_purchase_price")
+    add_to_db(r, title="Adding steam Selector")
 
     url1 = "http://www.amazon.com/Programming-Python-Mark-Lutz/dp/0596158106/ref=sr_1_2?ie=UTF8&qid=1365687660&sr=8-2&keywords=python"
     url2 = "http://www.amazon.com/Accoutrements-11884-Squirrel-Underpants/dp/B004I03BCM/ref=sr_1_1?ie=UTF8&qid=1365687697&sr=8-1&keywords=squirrel+underpants"

@@ -1,6 +1,22 @@
 PyChecker
 ==
 
+Installation
+--
+
+- install node.js
+- install phantom.js
+- run `pip install -r requirements.txt`
+
+
+Starting the application
+--
+
+- Run ./runserver.sh
+- If this is your first time running the server, be sure to intialize the database. This is not the correct way to do so, but for now you can do initialize the database by visiting the '/init/' route
+- Schedule a cron job to execute scraper/cron.py
+
+
 Design
 --
 

@@ -3,6 +3,7 @@ from pychecker.models import User
 from pychecker.scraper import valid_product
 from pychecker.database import db_session
 from pychecker import models
+import re
 
 
 class LoginForm(Form):
@@ -41,11 +42,7 @@ class ProductForm(Form):
     url = TextField(label='url',
                     validators=[validators.Required()],
                     description="URL To Product")
-    # brand = SelectField('Brand', choices=[
-    #     ('amz', 'Amazon'), ('new', 'Newegg'), ('gap', 'GAP'),
-    #     ('old', 'Old Navy'), ('urb', 'Urban Outfitters'),
-    #     ('mac', 'Macy\'s'), ('stm', 'Steam')
-    # ])
+
     name = TextField(label='Product Name',
                      validators=[validators.Required()],
                      description="Name of Product")
@@ -59,9 +56,15 @@ class ProductForm(Form):
         if not rv:
             return False
 
-        if not valid_product(self.url.data):
+        domain = re.findall("[www.{0,1}\.]*[a-z.0-9]+\.com", self.url.data)
+        if len(domain) < 1:
             self.url.errors.append('Invalid URL')
             return False
+        else:
+            domain = domain[0]
+            sel = models.Selector.query.filter(models.Selector.domain == domain)
+            if sel.count() < 1:
+                self.url.errors.append('This site is not yet supported.')
 
         return True
 

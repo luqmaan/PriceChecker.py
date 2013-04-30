@@ -5,13 +5,13 @@ login_manager = LoginManager()
 login_manager.setup_app(app)
 
 from pychecker.database import db_session
-from pychecker.config import secret_key
+from . import config
 from pychecker import models
 from pychecker import database
 from pychecker import views
 
 app.config['TRAP_BAD_REQUEST_ERRORS'] = True
-app.secret_key = secret_key
+app.secret_key = configuration.secret_key
 
 database.start_engine()
 

@@ -33,7 +33,7 @@ def getRateLimit(type, when):
 def valid_product(url):
     'placeholder for a function that tests if a product is valid'
 
-    url_regex = re.compile(
+    url_selector = re.compile(
         r'^(?:http|ftp)s?://'  # http:// or https://
         r'(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+(?:[A-Z]{2,6}\.?|[A-Z0-9-]{2,}\.?)|'  # domain...
         r'localhost|'  # localhost...
@@ -41,13 +41,13 @@ def valid_product(url):
         r'(?::\d+)?'  # optional port
         r'(?:/?|[/?]\S+)$', re.IGNORECASE)
 
-    if not re.match(url_regex, url):
+    if not re.match(url_selector, url):
         return False
 
-    # check for regexes matching url...if not, site is not supported currently
+    # check for selectores matching url...if not, site is not supported currently
     url = getHostPart(url)
 
-    r = db_session.query(RegEx).filter(RegEx.siteurl.like('%'+url['host']+'%'))
+    r = db_session.query(Selector).filter(Selector.domain.like('%'+url['host']+'%'))
     if r.count() > 0:
         return True
 
@@ -65,7 +65,7 @@ def update(url):
     u = getHostPart(url)
 
     p = db_session.query(Product).filter(Product.url == url).first()
-    r = db_session.query(RegEx).filter(RegEx.siteurl.like('%'+u['host']+'%')).all()
+    r = db_session.query(Selector).filter(Selector.domain.like('%'+u['host']+'%')).all()
 
     if app.debug is False:
 
@@ -119,7 +119,7 @@ def update(url):
     price = ""
 
     for row in r:
-        result, res = g.evaluate("document.querySelector('" + row.regex + "').innerText")
+        result, res = g.evaluate("document.querySelector('" + row.selector + "').innerText")
         if result is None:
             continue
 

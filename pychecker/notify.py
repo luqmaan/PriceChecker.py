@@ -1,11 +1,11 @@
-from pychecker import config
+from pychecker import configuration
 from twilio.rest import TwilioRestClient
 from twilio import twiml
 
 
-account = config.account
-token = config.token
-from_ = config.from_
+account = configuration.account
+token = configuration.token
+from_ = configuration.from_
 client = TwilioRestClient(account, token)
 
 
