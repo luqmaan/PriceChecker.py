@@ -1,18 +1,28 @@
 PyChecker
 ==
 
+http://pychecker.com
+
+![Image](fabulous.jpg?raw=true)
+
+It sucks to check prices on those fabulous new shoes everyday, waiting for them to be on sale.
+
+Meet [PyChecker](http://pychecker.com), a web server + scraper that notifies you when the price changes. It's like IFTTT for products. Add a product and get notifications when the price changes.
+
+
 Installation
 --
 
 - install node.js
 - install phantom.js
+- install [Python Imaging Library](https://developers.google.com/appengine/docs/python/images/installingPIL#mac)
 - run `pip install -r requirements.txt`
 
 
 Starting the application
 --
 
-- Run ./runserver.sh
+- Run ./runserver.py
 - If this is your first time running the server, be sure to intialize the database. This is not the correct way to do so, but for now you can do initialize the database by visiting the '/init/' route
 - Schedule a cron job to execute scraper/cron.py
 
@@ -29,20 +39,3 @@ Fonts are:
 - Arial
 
 
-Database
---
-
-To initialize the database with some basic info, enable the `database.init()` line in __init__.py. This adds:
-
-- A user named john who has a toothbrush and chocolate
-- A user named jane who has chocolate
-
-
-To view these users products:
-
-    john = db_session.query(models.User).filter(models.User.username == "john").first()
-    jane = db_session.query(models.User).filter(models.User.username == "jane").first()
-    print jane.products
-        -> [<Product ('Chocolate', 'http://amazon.com','77', '11', '/static/img/screenshot.jpg')>]
-    print john.products
-        -> [<Product ('Toothbrush', 'http://google.com','50', '23', '/static/img/screenshot.jpg')>, <Product ('Chocolate', 'http://amazon.com','77', '11', '/static/img/screenshot.jpg')>]
