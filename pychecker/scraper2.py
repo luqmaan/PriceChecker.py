@@ -1,7 +1,7 @@
 import hashlib
 import re
 import os
-from URLError import URLError
+from helpers import URLError
 from selenium import webdriver
 
 # This file should not interact with the database or the flask app

@@ -11,7 +11,7 @@ from pychecker import database
 from pychecker import views
 
 app.config['TRAP_BAD_REQUEST_ERRORS'] = True
-app.secret_key = configuration.secret_key
+app.secret_key = config.secret_key
 
 database.start_engine()
 

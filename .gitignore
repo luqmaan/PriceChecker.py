@@ -2,5 +2,9 @@
 Thumbs.db
 .DS_Store
 *.pyc
+config.py
 pychecker/config.py
 .vimrc
+ghostdriver.log
+nohup.out
+

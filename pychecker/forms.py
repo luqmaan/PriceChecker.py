@@ -1,6 +1,5 @@
 from flask.ext.wtf import Form, TextField, PasswordField, validators, SelectField
 from pychecker.models import User
-from pychecker.scraper import valid_product
 from pychecker.database import db_session
 from pychecker import models
 import re

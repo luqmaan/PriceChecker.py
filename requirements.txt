@@ -6,3 +6,4 @@ PassLib>=1.6.1
 alembic>=0.5.0
 twilio>=3.4.5
 selenium>=2.32.0
+clint2>=0.3.2
