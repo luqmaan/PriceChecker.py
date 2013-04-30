@@ -17,11 +17,13 @@ from flask.ext.login import login_required
 from flask.ext.login import current_user
 from clint.textui import colored
 from twilio import twiml
+from helpers import domain_for
 
-from pychecker.scraper import update
+from pychecker.scraper2 import product_info
 
 
-@app.route('/debug')
+
+@app.route('/debug/')
 def debug():
     'http://flask.pocoo.org/snippets/21/'
     raise
@@ -140,7 +142,10 @@ def product():
         if form.validate():
             # get product data from le scraper
             try:
-                price, img = update(form.url.data)
+                domain = domain_for(form.url.data)
+                selector = models.Selector.query.filter(models.Selector.domain == domain).first()
+                selector = selector.selector
+                price, img = product_info(form.url.data, selector)
             except Exception as e:
                 return dashboard(form=form, message=str(e))
             else:
@@ -241,8 +246,8 @@ def init():
 
     url1 = "http://www.amazon.com/Programming-Python-Mark-Lutz/dp/0596158106/ref=sr_1_2?ie=UTF8&qid=1365687660&sr=8-2&keywords=python"
     url2 = "http://www.amazon.com/Accoutrements-11884-Squirrel-Underpants/dp/B004I03BCM/ref=sr_1_1?ie=UTF8&qid=1365687697&sr=8-1&keywords=squirrel+underpants"
-    price1, img1 = update(url1)
-    price2, img2 = update(url2)
+    price1, img1 = product_info(url1, "B.priceLarge")
+    price2, img2 = product_info(url2, "B.priceLarge")
 
     new_product0 = models.Product(name="Python Programming",
                                   url=url1,

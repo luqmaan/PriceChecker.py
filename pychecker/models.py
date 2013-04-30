@@ -6,7 +6,7 @@ from sqlalchemy.orm import relationship, backref
 from sqlalchemy.schema import Table
 from passlib.apps import custom_app_context as pwd_context
 from database import Base
-from errors import URLError
+from helpers import URLError, domain_for
 
 # http://docs.sqlalchemy.org/en/latest/orm/relationships.html#many-to-many
 usersproducts_table = Table('userproducts', Base.metadata,
@@ -41,7 +41,7 @@ class Product(Base):
         self.currentPrice = currentPrice
         self.image = image
         domain = domain_for(url)
-        self.selector = Selector.query.filter(Selector.domain == domain).first()
+        self.selector = Selector.query.filter(Selector.domain == domain)
 
     def __repr__(self):
         return "<Product ('%s', '%s','%s', '%s')>" % \

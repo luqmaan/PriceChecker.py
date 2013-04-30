@@ -14,7 +14,7 @@ def main():
     products = models.Product.query.all()
     for product in products:
         print (product.url, product.selector)
-        price, img = scraper2.get_price(product.url, product.selector)
+        price, img = scraper2.product_info(product.url, product.selector)
         if price is not product.price:
             notify_queue.append((product, product.price, price))
             product.price = price
