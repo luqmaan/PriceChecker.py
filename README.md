@@ -1,7 +1,5 @@
-PyChecker
+[PyChecker](http://pychecker.com)
 ==
-
-http://pychecker.com
 
 ![Image](fabulous.jpg?raw=true)
 
