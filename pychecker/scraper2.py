@@ -1,8 +1,8 @@
 import hashlib
 import re
-import os
 from helpers import URLError
 from selenium import webdriver
+from clint.textui import colored
 
 # This file should not interact with the database or the flask app
 # Instead it provides methods for getting the data from phantom.
@@ -10,11 +10,14 @@ from selenium import webdriver
 # so that we don't have to restart Phantom every time we get a new request.
 # After the first request (~10 seconds), most requests take ~5s or less.
 
+print colored.red("STARTING PHANTOM")
 phantom = webdriver.PhantomJS()
 phantom.set_window_size(1024, 768)
 
 
 def product_info(url, selector):
+
+    print colored.yellow("CALLED PRODUCT INFO")
 
     if not valid_url(url):
         raise URLError(url)

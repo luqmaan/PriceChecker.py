@@ -198,6 +198,14 @@ def sites():
     return render_template("debug.html", message=message)
 
 
+@app.route('/getsite/')
+def getsite():
+    import requests
+    site = requests.get("http://www.amazon.com/gp/product/B0083PWAPW/ref=kin_dev_gw_dual_t?ie=UTF8&nav_sdd=aps&pf_rd_m=ATVPDKIKX0DER&pf_rd_s=center-1&pf_rd_r=0AB6YEC5AMG4J1801183&pf_rd_t=101&pf_rd_p=1493999442&pf_rd_i=507846")
+    html = site.content.decode('utf-8', 'ignore')
+    return render_template("embed.html", html=html)
+
+
 @app.route('/init/')
 def init():
     "initializes the database"

@@ -16,13 +16,6 @@ usersproducts_table = Table('userproducts', Base.metadata,
 # XXX link userproducts to selector_id so each user can choose which block on page to monitor?
 
 
-def domain_for(url):
-    domain = re.findall("[www.{0,1}\.]*[a-z.0-9]+\.com", url)
-    if len(domain) < 1:
-        raise URLError(domain)
-    return domain[0]
-
-
 class Product(Base):
     __tablename__ = "products"
 
@@ -93,12 +86,11 @@ class User(Base):
 class Selector(Base):
     __tablename__ = "selectors"
     id = Column(Integer, primary_key=True)  # id/key
-    domain = Column(String)  # url of site, maybe make associated with product urls?
+    domain = Column(String)
     selector = Column(String)  # selector/xpath
     date_added = Column(DateTime, default=sqlalchemy.func.now())
     product_id = Column(Integer, ForeignKey('products.id'))
     history = relationship("ScrapeHistory", backref="SelectorHistory", lazy="dynamic")
-    # XXX save selector "name" like name/price so that we can know what kind of data it is getting?
 
     def __init__(self, url, selector):
         domain = domain_for(url)
