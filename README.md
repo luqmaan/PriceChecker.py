@@ -1,11 +1,11 @@
-[PyChecker](http://pychecker.com)
+PyChecker
 ==
 
 ![Image](fabulous.jpg?raw=true)
 
 It sucks to check prices on those fabulous new shoes everyday, waiting for them to be on sale.
 
-Meet [PyChecker](http://pychecker.com), a web server + scraper that notifies you when the price changes. It's like IFTTT for products. Add a product and get notifications when the price changes.
+Meet PyChecker, a web server + scraper that notifies you when the price changes. It's like IFTTT for products. Add a product and get notifications when the price changes.
 
 
 Installation
